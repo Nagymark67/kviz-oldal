@@ -106,6 +106,14 @@ st.markdown("""
         box-shadow: 0 0 16px rgba(0, 255, 170, 0.3), inset 0 0 12px rgba(0, 255, 170, 0.08);
         opacity: 1;
     }
+    [class*="st-key-answer-choice-wrong-"] button[kind="secondary"],
+    [class*="st-key-answer-choice-wrong-"] button[kind="secondary"]:disabled {
+        border-color: #ff5267;
+        background-color: rgba(255, 55, 75, 0.16);
+        color: #fff0f2;
+        box-shadow: 0 0 16px rgba(255, 55, 75, 0.3), inset 0 0 12px rgba(255, 55, 75, 0.08);
+        opacity: 1;
+    }
     #MainMenu, footer, header {visibility: hidden;}
     hr {border-color: #333333;}
 </style>
@@ -802,20 +810,24 @@ else:
         st.subheader(question["question"])
 
         for option_index, option in enumerate(question["options"]):
-            option_label = f"✓ {option}" if option == saved_answer else option
-            if st.button(
-                option_label,
-                key=f"answer-{question_index}-{option_index}",
-                type="primary" if option == saved_answer else "secondary",
-                disabled=saved_answer is not None,
-                use_container_width=True,
-            ):
-                st.session_state.user_answers[question_index] = option
-                st.session_state.answer_burst = {
-                    "question_index": question_index,
-                    "is_correct": option == question["answer"],
-                }
-                st.rerun()
+            is_selected = option == saved_answer
+            is_correct = is_selected and saved_answer == question["answer"]
+            answer_state = "correct" if is_correct else "wrong" if is_selected else "idle"
+            option_label = f"{'✓' if is_correct else '✕'} {option}" if is_selected else option
+            with st.container(key=f"answer-choice-{answer_state}-{question_index}-{option_index}"):
+                if st.button(
+                    option_label,
+                    key=f"answer-{question_index}-{option_index}",
+                    type="primary" if is_correct else "secondary",
+                    disabled=saved_answer is not None,
+                    use_container_width=True,
+                ):
+                    st.session_state.user_answers[question_index] = option
+                    st.session_state.answer_burst = {
+                        "question_index": question_index,
+                        "is_correct": option == question["answer"],
+                    }
+                    st.rerun()
 
         selected_answer = saved_answer
         if selected_answer is not None:
