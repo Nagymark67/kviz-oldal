@@ -98,8 +98,8 @@ if st.session_state.submitted:
         
         if user_ans == correct_ans:
             score += 1
-            st.success(f"{i+1. kérdés}: Helyes!")
+            st.success(f"{i+1}. kérdés: Helyes!")
         else:
-            st.error(f"{i+1. kérdés}: Helytelen. A te válaszod: '{user_ans}'. A helyes válasz: '{correct_ans}'.")
+            st.error(f"{i+1}. kérdés: Helytelen. A te válaszod: '{user_ans}'. A helyes válasz: '{correct_ans}'.")
     
     st.metric(label="Végső pontszám", value=f"{score} / {len(quiz_data)}")
