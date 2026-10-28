@@ -40,7 +40,7 @@ def upload_pdf_to_gemini(file_path):
     return client.files.upload(file=file_path)
 
 @st.cache_data
-def generate_quiz_data(_document, question_count, batch_number, document_name, generation_seed, previous_questions):
+def generate_quiz_data(_document, question_count, batch_number, document_name, generation_seed, previous_questions, model_name):
     previous_questions_text = "\n".join(f"- {question}" for question in previous_questions)
     if not previous_questions_text:
         previous_questions_text = "Nincs korábbi kérdés."
@@ -58,7 +58,7 @@ def generate_quiz_data(_document, question_count, batch_number, document_name, g
     """
     
     response = client.models.generate_content(
-        model='gemini-3.8-flash',
+        model=model_name,
         contents=[
             _document,
             prompt
@@ -72,18 +72,27 @@ def generate_quiz_data(_document, question_count, batch_number, document_name, g
 PDF_FILE_PATH = "document.pdf" 
 QUIZ_QUESTION_COUNT = 50
 QUESTIONS_PER_BATCH = 10
+MODEL_OPTIONS = {
+    "Gemini 3.8 Flash (gyorsabb)": "gemini-3.8-flash",
+    "Gemini 3.1 Pro Preview (alaposabb)": "gemini-3.1-pro-preview",
+}
 
 if not os.path.exists(PDF_FILE_PATH):
     st.error(f"A(z) {PDF_FILE_PATH} fájl nem található.")
     st.stop()
 
 st.title("balekvizsgára")
+selected_model_label = st.selectbox("Gemini modell", list(MODEL_OPTIONS))
+selected_model = MODEL_OPTIONS[selected_model_label]
+
+if "quiz_model" in st.session_state and st.session_state.quiz_model != selected_model:
+    st.info("A modellváltás az új kvíz generálásakor lép életbe.")
 
 with st.spinner("Dokumentum feldolgozása..."):
     pdf_ref = upload_pdf_to_gemini(PDF_FILE_PATH)
 
 if "quiz_data" in st.session_state and st.button("Új kvíz generálása"):
-    for key in ("quiz_data", "quiz_seed", "user_answers", "submitted"):
+    for key in ("quiz_data", "quiz_seed", "quiz_model", "user_answers", "submitted"):
         st.session_state.pop(key, None)
     st.rerun()
 
@@ -105,10 +114,12 @@ if "quiz_data" not in st.session_state:
                 pdf_ref.name,
                 st.session_state.quiz_seed,
                 tuple(question["question"] for question in quiz_data),
+                selected_model,
             ))
             progress_bar.progress(len(quiz_data) / QUIZ_QUESTION_COUNT)
         random.shuffle(quiz_data)
         st.session_state.quiz_data = quiz_data
+        st.session_state.quiz_model = selected_model
         progress_text.empty()
         progress_bar.empty()
     except Exception as error:
