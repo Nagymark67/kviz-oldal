@@ -1,6 +1,8 @@
 import streamlit as st
 import os
 import json
+import random
+import uuid
 from google import genai
 from google.genai import types
 
@@ -38,10 +40,19 @@ def upload_pdf_to_gemini(file_path):
     return client.files.upload(file=file_path)
 
 @st.cache_data
-def generate_quiz_data(_document, question_count, batch_number, document_name):
+def generate_quiz_data(_document, question_count, batch_number, document_name, generation_seed, previous_questions):
+    previous_questions_text = "\n".join(f"- {question}" for question in previous_questions)
+    if not previous_questions_text:
+        previous_questions_text = "Nincs korábbi kérdés."
+
     prompt = f"""
     Generálj pontosan {question_count} feleletválasztós kérdést a megadott dokumentum alapján magyar nyelven.
-    Ez a(z) {batch_number + 1}. kérdéscsomag; válassz az előző csomagoktól eltérő tényeket.
+    Ez a(z) {batch_number + 1}. kérdéscsomag. Keverd a témákat, ne kövesd a dokumentum sorrendjét.
+    Legyen változatos a kérdéstípus: tényfelidézés, fogalommagyarázat, ok-okozat, összehasonlítás,
+    következtetés és gyakorlati alkalmazás. Csak a dokumentumban szereplő információkra támaszkodj.
+    Ne ismételd vagy fogalmazd át ezeket a korábbi kérdéseket:
+    {previous_questions_text}
+    Variációazonosító: {generation_seed}. Készíts ehhez új kérdésváltozatokat.
     Kizárólag egy JSON tömböt adj vissza, amely objektumokat tartalmaz a következő kulcsokkal: 
     'question' (sztring), 'options' (4 sztringből álló tömb), és 'answer' (sztring, amelynek pontosan meg kell egyeznie az egyik opcióval).
     """
@@ -71,31 +82,46 @@ st.title("balekvizsgára")
 with st.spinner("Dokumentum feldolgozása..."):
     pdf_ref = upload_pdf_to_gemini(PDF_FILE_PATH)
 
-quiz_data = []
-progress_text = st.empty()
-progress_bar = st.progress(0)
-try:
-    for batch_number, start in enumerate(range(0, QUIZ_QUESTION_COUNT, QUESTIONS_PER_BATCH)):
-        question_count = min(QUESTIONS_PER_BATCH, QUIZ_QUESTION_COUNT - start)
-        progress_text.write(f"Kérdések generálása: {len(quiz_data)} / {QUIZ_QUESTION_COUNT}")
-        quiz_data.extend(generate_quiz_data(
-            pdf_ref,
-            question_count,
-            batch_number,
-            pdf_ref.name,
-        ))
-        progress_bar.progress(len(quiz_data) / QUIZ_QUESTION_COUNT)
-    progress_text.empty()
-    progress_bar.empty()
-except Exception as error:
-    progress_text.empty()
-    progress_bar.empty()
-    error_code = getattr(error, "code", None)
-    if error_code is not None:
-        st.error(f"A kérdésgenerálás sikertelen (Gemini API hiba: {error_code}). Ellenőrizd a Streamlit naplóit.")
-    else:
-        st.error("A kérdésgenerálás időtúllépés vagy más hiba miatt megszakadt. Próbáld újra később.")
-    st.stop()
+if "quiz_data" in st.session_state and st.button("Új kvíz generálása"):
+    for key in ("quiz_data", "quiz_seed", "user_answers", "submitted"):
+        st.session_state.pop(key, None)
+    st.rerun()
+
+if "quiz_data" not in st.session_state:
+    if "quiz_seed" not in st.session_state:
+        st.session_state.quiz_seed = uuid.uuid4().hex
+
+    quiz_data = []
+    progress_text = st.empty()
+    progress_bar = st.progress(0)
+    try:
+        for batch_number, start in enumerate(range(0, QUIZ_QUESTION_COUNT, QUESTIONS_PER_BATCH)):
+            question_count = min(QUESTIONS_PER_BATCH, QUIZ_QUESTION_COUNT - start)
+            progress_text.write(f"Kérdések generálása: {len(quiz_data)} / {QUIZ_QUESTION_COUNT}")
+            quiz_data.extend(generate_quiz_data(
+                pdf_ref,
+                question_count,
+                batch_number,
+                pdf_ref.name,
+                st.session_state.quiz_seed,
+                tuple(question["question"] for question in quiz_data),
+            ))
+            progress_bar.progress(len(quiz_data) / QUIZ_QUESTION_COUNT)
+        random.shuffle(quiz_data)
+        st.session_state.quiz_data = quiz_data
+        progress_text.empty()
+        progress_bar.empty()
+    except Exception as error:
+        progress_text.empty()
+        progress_bar.empty()
+        error_code = getattr(error, "code", None)
+        if error_code is not None:
+            st.error(f"A kérdésgenerálás sikertelen (Gemini API hiba: {error_code}). Ellenőrizd a Streamlit naplóit.")
+        else:
+            st.error("A kérdésgenerálás időtúllépés vagy más hiba miatt megszakadt. Próbáld újra később.")
+        st.stop()
+else:
+    quiz_data = st.session_state.quiz_data
 
 if "user_answers" not in st.session_state:
     st.session_state.user_answers = {}
