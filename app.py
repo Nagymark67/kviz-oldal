@@ -5,7 +5,7 @@ from google import genai
 from google.genai import types
 
 # Téma és UI finomhangolás (Futurisztikus/Minimalista)
-st.set_page_config(page_title="PDF Kvíz Generátor", layout="centered")
+st.set_page_config(page_title="balekvizsgára", layout="centered")
 st.markdown("""
 <style>
     /* Futurisztikus gomb és letisztult UI elemek */
@@ -37,13 +37,13 @@ def upload_pdf_to_gemini(file_path):
 @st.cache_data
 def generate_quiz_data(_document):
     prompt = """
-    Generálj 5 feleletválasztós kérdést a megadott dokumentum alapján magyar nyelven. 
+    Generálj 50 feleletválasztós kérdést a megadott dokumentum alapján magyar nyelven. 
     Kizárólag egy JSON tömböt adj vissza, amely objektumokat tartalmaz a következő kulcsokkal: 
     'question' (sztring), 'options' (4 sztringből álló tömb), és 'answer' (sztring, amelynek pontosan meg kell egyeznie az egyik opcióval).
     """
     
     response = client.models.generate_content(
-        model='gemini-2.5-flash',
+        model='gemini-3.8-flash',
         contents=[
             _document,
             prompt
@@ -60,7 +60,7 @@ if not os.path.exists(PDF_FILE_PATH):
     st.error(f"A(z) {PDF_FILE_PATH} fájl nem található.")
     st.stop()
 
-st.title("Dinamikus Kvíz")
+st.title("balekvizsgára")
 
 with st.spinner("Dokumentum feldolgozása..."):
     pdf_ref = upload_pdf_to_gemini(PDF_FILE_PATH)
