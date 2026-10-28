@@ -28,16 +28,20 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 api_key = st.secrets.get("GEMINI_API_KEY")
-client = genai.Client(api_key=api_key)
+client = genai.Client(
+    api_key=api_key,
+    http_options=types.HttpOptions(timeout=60_000),
+)
 
 @st.cache_resource
 def upload_pdf_to_gemini(file_path):
     return client.files.upload(file=file_path)
 
 @st.cache_data
-def generate_quiz_data(_document):
-    prompt = """
-    Generálj 50 feleletválasztós kérdést a megadott dokumentum alapján magyar nyelven. 
+def generate_quiz_data(_document, question_count, batch_number, document_name):
+    prompt = f"""
+    Generálj pontosan {question_count} feleletválasztós kérdést a megadott dokumentum alapján magyar nyelven.
+    Ez a(z) {batch_number + 1}. kérdéscsomag; válassz az előző csomagoktól eltérő tényeket.
     Kizárólag egy JSON tömböt adj vissza, amely objektumokat tartalmaz a következő kulcsokkal: 
     'question' (sztring), 'options' (4 sztringből álló tömb), és 'answer' (sztring, amelynek pontosan meg kell egyeznie az egyik opcióval).
     """
@@ -55,6 +59,8 @@ def generate_quiz_data(_document):
     return json.loads(response.text)
 
 PDF_FILE_PATH = "document.pdf" 
+QUIZ_QUESTION_COUNT = 50
+QUESTIONS_PER_BATCH = 10
 
 if not os.path.exists(PDF_FILE_PATH):
     st.error(f"A(z) {PDF_FILE_PATH} fájl nem található.")
@@ -65,8 +71,31 @@ st.title("balekvizsgára")
 with st.spinner("Dokumentum feldolgozása..."):
     pdf_ref = upload_pdf_to_gemini(PDF_FILE_PATH)
 
-with st.spinner("Kérdések generálása..."):
-    quiz_data = generate_quiz_data(pdf_ref)
+quiz_data = []
+progress_text = st.empty()
+progress_bar = st.progress(0)
+try:
+    for batch_number, start in enumerate(range(0, QUIZ_QUESTION_COUNT, QUESTIONS_PER_BATCH)):
+        question_count = min(QUESTIONS_PER_BATCH, QUIZ_QUESTION_COUNT - start)
+        progress_text.write(f"Kérdések generálása: {len(quiz_data)} / {QUIZ_QUESTION_COUNT}")
+        quiz_data.extend(generate_quiz_data(
+            pdf_ref,
+            question_count,
+            batch_number,
+            pdf_ref.name,
+        ))
+        progress_bar.progress(len(quiz_data) / QUIZ_QUESTION_COUNT)
+    progress_text.empty()
+    progress_bar.empty()
+except Exception as error:
+    progress_text.empty()
+    progress_bar.empty()
+    error_code = getattr(error, "code", None)
+    if error_code is not None:
+        st.error(f"A kérdésgenerálás sikertelen (Gemini API hiba: {error_code}). Ellenőrizd a Streamlit naplóit.")
+    else:
+        st.error("A kérdésgenerálás időtúllépés vagy más hiba miatt megszakadt. Próbáld újra később.")
+    st.stop()
 
 if "user_answers" not in st.session_state:
     st.session_state.user_answers = {}
