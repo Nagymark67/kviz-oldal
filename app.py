@@ -4,12 +4,52 @@ import random
 st.set_page_config(page_title="balekvizsgára", layout="centered")
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
+    .stApp {
+        font-family: 'DM Sans', sans-serif;
+    }
+    .stApp .block-container {
+        max-width: 760px;
+        padding-top: 2rem;
+    }
+    .stApp h1, .stApp h2, .stApp h3,
+    .stApp [data-testid="stMarkdownContainer"],
+    .stApp label {
+        font-family: 'DM Sans', sans-serif;
+    }
+    .quiz-counter,
+    [data-testid="stMetricValue"] {
+        font-family: 'JetBrains Mono', monospace !important;
+        font-variant-numeric: tabular-nums;
+        color: #00ffaa;
+    }
     @keyframes question-enter {
         from { opacity: 0; transform: translateX(24px); }
         to { opacity: 1; transform: translateX(0); }
     }
     [class*="st-key-question-slide-"] {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 1.35rem 1.5rem;
+        border: 1px solid rgba(0, 255, 170, 0.18);
+        border-radius: 12px;
+        background: rgba(18, 18, 18, 0.72);
+        box-shadow: 0 0 30px rgba(0, 255, 170, 0.05);
+        backdrop-filter: blur(10px);
         animation: question-enter 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+    [data-testid="stProgress"] > div {
+        height: 0.65rem;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(0, 255, 170, 0.1);
+    }
+    [data-testid="stProgress"] > div > div {
+        height: 100%;
+        border-radius: inherit;
     }
     @keyframes answer-burst {
         0% { opacity: 0; transform: scale(0.96); }
@@ -36,14 +76,35 @@ st.markdown("""
         border: 1px solid #00ffaa;
         color: #00ffaa;
         background-color: transparent;
-        transition: 0.3s;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        border-radius: 8px;
+        padding: 0.8rem 1rem;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 600;
+        text-transform: none;
+        letter-spacing: 0;
+        transition: all 0.2s ease-in-out;
     }
-    .stButton>button:hover {
-        background-color: #00ffaa;
-        color: #000;
-        box-shadow: 0 0 15px #00ffaa;
+    .stButton>button:hover:enabled {
+        background-color: rgba(0, 255, 170, 0.15);
+        color: #e7fff7;
+        box-shadow: 0 0 15px rgba(0, 255, 170, 0.32);
+        transform: translateY(-1px);
+    }
+    [class*="st-key-answer-"] button {
+        min-height: 3.5rem;
+        padding: 0.9rem 1rem;
+        line-height: 1.35;
+        text-align: left;
+        white-space: normal;
+        justify-content: flex-start;
+    }
+    [class*="st-key-answer-"] button[kind="primary"],
+    [class*="st-key-answer-"] button[kind="primary"]:disabled {
+        border-color: #00ffaa;
+        background-color: rgba(0, 255, 170, 0.15);
+        color: #e7fff7;
+        box-shadow: 0 0 16px rgba(0, 255, 170, 0.3), inset 0 0 12px rgba(0, 255, 170, 0.08);
+        opacity: 1;
     }
     #MainMenu, footer, header {visibility: hidden;}
     hr {border-color: #333333;}
@@ -709,7 +770,10 @@ if st.session_state.submitted:
             st.error(f"{i+1}. kérdés: Helytelen. A te válaszod: '{valasz_szoveg}'. A helyes válasz: '{correct_ans}'.")
             st.info(f"**Magyarázat:** {q['explanation']}")
     
-    st.metric(label="Végső pontszám", value=f"{score} / {len(st.session_state.quiz_questions)}")
+        st.markdown(
+            f'<p class="quiz-counter">Végső pontszám: {score} / {len(st.session_state.quiz_questions)}</p>',
+            unsafe_allow_html=True,
+        )
 
     if st.button("Új 50 kérdéses kvíz indítása"):
         st.session_state.clear()
@@ -731,15 +795,18 @@ else:
 
     with st.container(key=f"question-slide-{question_index}"):
         st.progress((question_index + 1) / question_count)
-        st.caption(f"{question_index + 1} / {question_count}. kérdés")
+        st.markdown(
+            f'<p class="quiz-counter">{question_index + 1} / {question_count}. kérdés</p>',
+            unsafe_allow_html=True,
+        )
         st.subheader(question["question"])
 
-        st.caption("Válaszd ki a helyes választ:")
         for option_index, option in enumerate(question["options"]):
             option_label = f"✓ {option}" if option == saved_answer else option
             if st.button(
                 option_label,
                 key=f"answer-{question_index}-{option_index}",
+                type="primary" if option == saved_answer else "secondary",
                 disabled=saved_answer is not None,
                 use_container_width=True,
             ):
