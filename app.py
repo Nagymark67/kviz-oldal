@@ -4,6 +4,16 @@ import random
 st.set_page_config(page_title="balekvizsgára", layout="centered")
 st.markdown("""
 <style>
+    @keyframes question-enter {
+        from { opacity: 0; transform: translateX(24px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    [class*="st-key-question-slide-"] {
+        animation: question-enter 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        [class*="st-key-question-slide-"] { animation: none; }
+    }
     .stButton>button {
         border: 1px solid #00ffaa;
         color: #00ffaa;
@@ -665,21 +675,6 @@ if "user_answers" not in st.session_state:
 if "submitted" not in st.session_state:
     st.session_state.submitted = False
 
-with st.form("quiz_form"):
-    for i, q in enumerate(st.session_state.quiz_questions):
-        st.markdown(f"**{i+1}. {q['question']}**")
-        st.session_state.user_answers[i] = st.radio(
-            "Válassz egy opciót:",
-            q['options'],
-            key=f"q_{i}",
-            index=None
-        )
-        st.markdown("---")
-    
-    submit = st.form_submit_button("Válaszok beküldése")
-    if submit:
-        st.session_state.submitted = True
-
 if st.session_state.submitted:
     score = 0
     st.subheader("Eredmények és Magyarázatok")
@@ -701,3 +696,57 @@ if st.session_state.submitted:
     if st.button("Új 50 kérdéses kvíz indítása"):
         st.session_state.clear()
         st.rerun()
+else:
+    question_index = st.session_state.get("current_question", 0)
+    question_count = len(st.session_state.quiz_questions)
+    question = st.session_state.quiz_questions[question_index]
+    saved_answer = st.session_state.user_answers.get(question_index)
+
+    with st.container(key=f"question-slide-{question_index}"):
+        st.progress((question_index + 1) / question_count)
+        st.caption(f"{question_index + 1} / {question_count}. kérdés")
+        st.subheader(question["question"])
+
+        st.caption("Válaszd ki a helyes választ:")
+        for option_index, option in enumerate(question["options"]):
+            option_label = f"✓ {option}" if option == saved_answer else option
+            if st.button(
+                option_label,
+                key=f"answer-{question_index}-{option_index}",
+                disabled=saved_answer is not None,
+                use_container_width=True,
+            ):
+                st.session_state.user_answers[question_index] = option
+                st.rerun()
+
+        selected_answer = saved_answer
+        if selected_answer is not None:
+            if selected_answer == question["answer"]:
+                st.success("Helyes válasz!")
+            else:
+                st.error(f"Helytelen. A helyes válasz: {question['answer']}")
+                st.info(f"**Magyarázat:** {question['explanation']}")
+
+        back_column, next_column = st.columns(2)
+        with back_column:
+            if st.button("← Előző", disabled=question_index == 0, use_container_width=True):
+                st.session_state.current_question = question_index - 1
+                st.rerun()
+
+        with next_column:
+            is_last_question = question_index == question_count - 1
+            if is_last_question:
+                if st.button(
+                    "Eredmény megtekintése",
+                    disabled=selected_answer is None,
+                    use_container_width=True,
+                ):
+                    st.session_state.submitted = True
+                    st.rerun()
+            elif st.button(
+                "Következő →",
+                disabled=selected_answer is None,
+                use_container_width=True,
+            ):
+                st.session_state.current_question = question_index + 1
+                st.rerun()
