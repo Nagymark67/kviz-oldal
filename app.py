@@ -41,13 +41,18 @@ st.markdown("""
         backdrop-filter: blur(10px);
         animation: question-enter 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
     }
-    [data-testid="stProgress"] > div {
+    [data-testid="stProgress"] > [role="progressbar"] {
         height: 0.65rem;
         overflow: hidden;
         border-radius: 999px;
         background: rgba(0, 255, 170, 0.1);
     }
-    [data-testid="stProgress"] > div > div {
+    [data-testid="stProgressBarTrack"] {
+        height: 100%;
+        border-radius: inherit;
+        background: transparent;
+    }
+    [data-testid="stProgressBarTrack"] > div {
         height: 100%;
         border-radius: inherit;
     }
