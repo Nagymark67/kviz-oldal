@@ -11,8 +11,26 @@ st.markdown("""
     [class*="st-key-question-slide-"] {
         animation: question-enter 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
     }
+    @keyframes answer-burst {
+        0% { opacity: 0; transform: scale(0.96); }
+        18% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(1.06); }
+    }
+    .answer-burst {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        pointer-events: none;
+        animation: answer-burst 760ms ease-out both;
+    }
+    .answer-burst--correct {
+        background: radial-gradient(ellipse at 50% 45%, rgba(0, 255, 170, 0.32), rgba(0, 255, 170, 0.12) 36%, transparent 76%);
+    }
+    .answer-burst--wrong {
+        background: radial-gradient(ellipse at 50% 45%, rgba(255, 55, 75, 0.3), rgba(255, 55, 75, 0.11) 36%, transparent 76%);
+    }
     @media (prefers-reduced-motion: reduce) {
-        [class*="st-key-question-slide-"] { animation: none; }
+        [class*="st-key-question-slide-"], .answer-burst { animation: none; }
     }
     .stButton>button {
         border: 1px solid #00ffaa;
@@ -701,6 +719,15 @@ else:
     question_count = len(st.session_state.quiz_questions)
     question = st.session_state.quiz_questions[question_index]
     saved_answer = st.session_state.user_answers.get(question_index)
+    burst_event = st.session_state.get("answer_burst")
+
+    if burst_event is not None and burst_event["question_index"] == question_index:
+        burst_class = "correct" if burst_event["is_correct"] else "wrong"
+        st.markdown(
+            f'<div class="answer-burst answer-burst--{burst_class}"></div>',
+            unsafe_allow_html=True,
+        )
+        st.session_state.pop("answer_burst", None)
 
     with st.container(key=f"question-slide-{question_index}"):
         st.progress((question_index + 1) / question_count)
@@ -717,6 +744,10 @@ else:
                 use_container_width=True,
             ):
                 st.session_state.user_answers[question_index] = option
+                st.session_state.answer_burst = {
+                    "question_index": question_index,
+                    "is_correct": option == question["answer"],
+                }
                 st.rerun()
 
         selected_answer = saved_answer
