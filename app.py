@@ -768,7 +768,11 @@ if "submitted" not in st.session_state:
     st.session_state.submitted = False
 
 if st.session_state.submitted:
-    score = 0
+    score = sum(
+        st.session_state.user_answers.get(i) == q["answer"]
+        for i, q in enumerate(st.session_state.quiz_questions)
+    )
+    st.metric(label="Végső pontszám", value=f"{score} / {len(st.session_state.quiz_questions)}")
     st.subheader("Eredmények és Magyarázatok")
     
     for i, q in enumerate(st.session_state.quiz_questions):
@@ -776,17 +780,11 @@ if st.session_state.submitted:
         correct_ans = q['answer']
         
         if user_ans == correct_ans:
-            score += 1
             st.success(f"{i+1}. kérdés: Helyes! ({correct_ans})")
         else:
             valasz_szoveg = user_ans if user_ans is not None else "Nem válaszoltál"
             st.error(f"{i+1}. kérdés: Helytelen. A te válaszod: '{valasz_szoveg}'. A helyes válasz: '{correct_ans}'.")
             st.info(f"**Magyarázat:** {q['explanation']}")
-    
-        st.markdown(
-            f'<p class="quiz-counter">Végső pontszám: {score} / {len(st.session_state.quiz_questions)}</p>',
-            unsafe_allow_html=True,
-        )
 
     if st.button("Új 50 kérdéses kvíz indítása"):
         st.session_state.clear()
