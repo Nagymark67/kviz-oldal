@@ -4,7 +4,6 @@ import random
 import sqlite3
 import json
 from pathlib import Path
-from urllib.parse import quote
 
 st.set_page_config(page_title="balekvizsgára", layout="centered")
 st.markdown("""
@@ -97,9 +96,6 @@ st.markdown("""
         background-color: rgba(255, 180, 90, 0.12);
         color: #ffe0b2;
         box-shadow: 0 0 12px rgba(255, 180, 90, 0.25);
-    }
-    [class*="st-key-report-form-"] [data-testid="stFormSubmitButton"] {
-        display: none;
     }
     @media (prefers-reduced-motion: reduce) {
         [class*="st-key-question-slide-"], .answer-burst { animation: none; }
@@ -1150,45 +1146,66 @@ def render_question_report_form(report_key):
         st.warning(
             f"Jelentett kérdés: **{report_question['question']}**"
         )
-        with st.form(
-            key=f"report-form-{report_key}",
-            clear_on_submit=False,
-            enter_to_submit=True,
-        ):
-            report_text = st.text_area(
-                "Írd le, mi lenne helyes, vagy mi a probléma!",
-                key="report_text",
-            )
-            submitted = st.form_submit_button(
-                "Jelentés elküldése",
-                key=f"report-submit-{report_key}",
-            )
-        if submitted and report_text.strip():
-            options = "\n".join(
-                f"- {option}" for option in report_question["options"]
-            )
-            email_body = (
-                "Szia!\n\n"
-                "Hibát szeretnék jelenteni a balekvizsga egyik kérdésében.\n\n"
-                f"Kérdés:\n{report_question['question']}\n\n"
-                f"Válaszlehetőségek:\n{options}\n\n"
-                f"Jelenlegi helyes válasz: {report_question['answer']}\n\n"
-                f"Javasolt javítás / megjegyzés:\n{report_text.strip()}"
-            )
-            mailto_url = (
-                "mailto:nagymark2357@gmail.com"
-                f"?subject={quote('balekvizsga kérdés javítása')}"
-                f"&body={quote(email_body)}"
-            )
-            components.html(
-                f"""
-                <script>
-                    window.top.location.href = {json.dumps(mailto_url)};
-                </script>
-                <a href={json.dumps(mailto_url)}>E-mail megnyitása</a>
-                """,
-                height=28,
-            )
+        options = "\n".join(
+            f"- {option}" for option in report_question["options"]
+        )
+        email_body_prefix = (
+            "Szia!\n\n"
+            "Hibát szeretnék jelenteni a balekvizsga egyik kérdésében.\n\n"
+            f"Kérdés:\n{report_question['question']}\n\n"
+            f"Válaszlehetőségek:\n{options}\n\n"
+            f"Jelenlegi helyes válasz: {report_question['answer']}\n\n"
+            "Javasolt javítás / megjegyzés:\n"
+        )
+        components.html(
+            f"""
+            <label for="report-text">Írd le, mi lenne helyes, vagy mi a probléma!</label>
+            <textarea id="report-text" autofocus></textarea>
+            <script>
+                const reportText = document.getElementById("report-text");
+                const emailBodyPrefix = {json.dumps(email_body_prefix)};
+                reportText.addEventListener("keydown", (event) => {{
+                    if (event.key !== "Enter" || event.shiftKey) {{
+                        return;
+                    }}
+                    event.preventDefault();
+                    const report = reportText.value.trim();
+                    if (!report) {{
+                        return;
+                    }}
+                    const subject = encodeURIComponent("balekvizsga kérdés javítása");
+                    const body = encodeURIComponent(emailBodyPrefix + report);
+                    window.top.location.href =
+                        "mailto:nagymark2357@gmail.com?subject=" + subject + "&body=" + body;
+                }});
+            </script>
+            <style>
+                label {{
+                    display: block;
+                    margin-bottom: 0.4rem;
+                    color: #f0f0f0;
+                    font: 500 0.9rem 'DM Sans', sans-serif;
+                }}
+                textarea {{
+                    box-sizing: border-box;
+                    width: 100%;
+                    min-height: 84px;
+                    resize: vertical;
+                    padding: 0.65rem;
+                    border: 1px solid #00ffaa;
+                    border-radius: 8px;
+                    outline: none;
+                    color: #f0f0f0;
+                    background: #111111;
+                    font: 0.9rem 'DM Sans', sans-serif;
+                }}
+                textarea:focus {{
+                    box-shadow: 0 0 0 1px #00ffaa;
+                }}
+            </style>
+            """,
+            height=142,
+        )
 
 
 initialize_leaderboard()
