@@ -83,11 +83,13 @@ st.markdown("""
     [class*="st-key-question-report-"] button {
         border-color: rgba(255, 180, 90, 0.8);
         color: #ffc078;
+        width: 100%;
         min-height: 2.35rem;
-        padding: 0.45rem 0.8rem;
-        font-size: 0.78rem;
-        line-height: 1.15;
+        padding: 0.45rem 0.55rem;
+        font-size: 0.76rem;
+        line-height: 1.2;
         white-space: nowrap;
+        overflow: visible;
     }
     [class*="st-key-question-report-"] button:hover:enabled {
         background-color: rgba(255, 180, 90, 0.12);
@@ -711,7 +713,7 @@ ALL_QUESTIONS = [
         "explanation": "A Gruben elől 5 nagy, a mellzsebeken 2 kis, hátul 3-3 nagy bányászgombbal rendelkezik, vállát 4-5 függőleges és 3 vízszintes hurka vastagítja."
     },
     {
-        "question": "Milyen színű paszományt viselnek a bányászok és a kohászok a Grubenön?",
+        "question": "Milyen színű paszományt viselnek a bányászok és a kohászok a Grubenen?",
         "options": ["Bányászok: fekete, kohászok: meggypiros", "Bányászok: meggypiros, kohászok: fekete", "Bányászok: zöld, kohászok: sötétkék", "Mindkét szak: aranyszínű"],
         "answer": "Bányászok: fekete, kohászok: meggypiros",
         "explanation": "A Gruben fekete alapú; a bányászok fekete, a kohászok meggypiros paszományt viselnek."
@@ -1057,13 +1059,13 @@ ALL_QUESTIONS = [
         "explanation": "A dunaújvárosi Auf egyik jellegzetes eltérése a hátsó hasíték és a hat kisgomb hiánya, valamint a jobb oldali mellzseb."
     },
     {
-        "question": "Milyen színű paszományt viselnek a bányászok a Grubenön?",
+        "question": "Milyen színű paszományt viselnek a bányászok a Grubenen?",
         "options": ["Fekete", "Meggy-piros", "Zöld", "Sötétkék"],
         "answer": "Fekete",
         "explanation": "A Gruben fekete alapú, és a bányászok fekete paszományt viselnek rajta."
     },
     {
-        "question": "Milyen színű paszományt viselnek a kohászok a Grubenön?",
+        "question": "Milyen színű paszományt viselnek a kohászok a Grubenen?",
         "options": ["Meggy-piros", "Fekete", "Zöld", "Barna"],
         "answer": "Meggy-piros",
         "explanation": "A kohászok Grubenjén a paszomány meggy-piros színű."
@@ -1376,15 +1378,15 @@ else:
 
     with st.container(key=f"question-slide-{question_index}"):
         st.progress((question_index + 1) / question_count)
-        report_button_column = st.columns([2, 1])[1]
-        with report_button_column:
-            with st.container(key=f"question-report-{question_index}"):
-                render_question_report_button(question, f"quiz-{question_index}")
-        render_question_report_form(f"quiz-{question_index}")
         st.markdown(
             f'<p class="quiz-counter">{question_index + 1} / {question_count}. kérdés</p>',
             unsafe_allow_html=True,
         )
+        report_button_column = st.columns([1, 2])[1]
+        with report_button_column:
+            with st.container(key=f"question-report-{question_index}"):
+                render_question_report_button(question, f"quiz-{question_index}")
+        render_question_report_form(f"quiz-{question_index}")
         st.subheader(question["question"])
 
         for option_index, option in enumerate(question["options"]):
