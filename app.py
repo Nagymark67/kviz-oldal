@@ -1,5 +1,7 @@
 import streamlit as st
 import random
+import sqlite3
+from pathlib import Path
 
 st.set_page_config(page_title="balekvizsgára", layout="centered")
 st.markdown("""
@@ -533,10 +535,10 @@ ALL_QUESTIONS = [
         "explanation": "Az országos főerdőmester látogatásakor a Firmák szándékosan téves szakszavakkal tűzdelt beszédet írattak egy törtető balekkal."
     },
     {
-        "question": "Melyik nevet adja a baleknak a kereszteléskor a keresztapa, és melyiket a keresztanya?",
-        "options": ["Keresztapa: vulgo, Keresztanya: alias", "Keresztapa: alias, Keresztanya: vulgo", "Mindketten vulgót adnak", "Keresztapa: cimbora, Keresztanya: fuchs"],
-        "answer": "Keresztapa: vulgo, Keresztanya: alias",
-        "explanation": "A keresztapa adja a 'vulgo' nevet (Bacchusnak, Ceresnek és a többi pogány Istennek nevében), a keresztanya pedig az 'alias' nevet."
+        "question": "Mit mond a keresztapa és mit mond utána a keresztanya a balekkeresztelőn?",
+        "options": ["A keresztapa 'vulgo'-t mond, a keresztanya utána 'avagy'-t mond", "A keresztapa 'avagy'-t mond, a keresztanya utána 'vulgo'-t mond", "Mindketten 'vulgo'-t mondanak", "A keresztapa 'cimbora'-t, a keresztanya 'fuchs'-ot mond"],
+        "answer": "A keresztapa 'vulgo'-t mond, a keresztanya utána 'avagy'-t mond",
+        "explanation": "A PDF szerint a keresztapa a vulgo nevet mondja ki, majd a keresztanya utána az 'avagy' formulával adja meg a második nevet."
     },
     {
         "question": "Mit jelent a latin eredetű 'Valete!' szó?",
@@ -839,10 +841,10 @@ ALL_QUESTIONS = [
         "explanation": "A 'ne légy konfidens!' arra figyelmezteti a balekot, hogy ne legyen bizalmaskodó, és tartsa tiszteletben a hierarchiát."
     },
     {
-        "question": "Mit jelent az 'alias' és a 'vulgo' név a balekkeresztelőn?",
-        "options": ["A keresztapa vulgo, a keresztanya alias nevet ad", "A keresztapa alias, a keresztanya vulgo nevet ad", "Mindkettőt a Praeses adja", "Az alias a Firma, a vulgo a balek neve"],
-        "answer": "A keresztapa vulgo, a keresztanya alias nevet ad",
-        "explanation": "A keresztelési szokás szerint a keresztapa adja a vulgo, a keresztanya pedig az alias nevet."
+        "question": "Mi a szerepe a 'vulgo' és az 'avagy' formulának a balekkeresztelőn?",
+        "options": ["A keresztapa a 'vulgo' nevet mondja, majd a keresztanya utána az 'avagy' formulát mondja", "A keresztapa az 'avagy' formulát mondja, majd a keresztanya a 'vulgo' nevet", "Mindkét formulát a Praeses mondja", "A 'vulgo' a Firma, az 'avagy' pedig a szakestély neve"],
+        "answer": "A keresztapa a 'vulgo' nevet mondja, majd a keresztanya utána az 'avagy' formulát mondja",
+        "explanation": "A PDF szerint a keresztapa mondja ki a vulgo nevet, ezt követi a keresztanya 'avagy' formulája."
     },
     {
         "question": "Mi a balekvizsgán megszerezhető legjobb érdemjegy?",
@@ -1117,8 +1119,59 @@ ALL_QUESTIONS = [
 ]
 
 
+LEADERBOARD_DB = Path(__file__).with_name("leaderboard.db")
+
+
+def initialize_leaderboard():
+    connection = sqlite3.connect(LEADERBOARD_DB)
+    try:
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS leaderboard (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                score INTEGER NOT NULL,
+                total INTEGER NOT NULL,
+                created_at TEXT NOT NULL
+            )
+            """
+        )
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def get_leaderboard():
+    connection = sqlite3.connect(LEADERBOARD_DB)
+    try:
+        return connection.execute(
+            """
+            SELECT name, score, total
+            FROM leaderboard
+            ORDER BY score * 1.0 / total DESC, score DESC, created_at ASC
+            LIMIT 10
+            """
+        ).fetchall()
+    finally:
+        connection.close()
+
+
+def save_leaderboard_entry(name, score, total):
+    connection = sqlite3.connect(LEADERBOARD_DB)
+    try:
+        connection.execute(
+            """
+            INSERT INTO leaderboard (name, score, total, created_at)
+            VALUES (?, ?, ?, datetime('now'))
+            """,
+            (name, score, total),
+        )
+        connection.commit()
+    finally:
+        connection.close()
+
+
 def build_wrong_answer_explanation(question, user_answer):
-    """Turn the source-based explanation into a clear correction for a wrong answer."""
     correct_answer = question["answer"]
     source_explanation = question["explanation"]
 
@@ -1129,16 +1182,55 @@ def build_wrong_answer_explanation(question, user_answer):
         )
 
     return (
-        f"Azért nem helyes, mert a megadott válasz ('{user_answer}') nem egyezik "
-        f"a kérdésben szereplő ténnyel. A helyes válasz '{correct_answer}', "
-        f"mert a forrás szerinti magyarázat ez: {source_explanation}"
+        f"Azért volt hibás, mert nem a '{user_answer}' a helyes válasz, hanem "
+        f"'{correct_answer}'. {source_explanation}"
     )
+
+
+initialize_leaderboard()
+
+if "page" not in st.session_state:
+    st.session_state.page = "welcome"
+
+if st.session_state.page == "welcome":
+    st.title("balekvizsgára")
+    st.subheader("Üdvözöllek a balekvizsgán!")
+    st.write(
+        "Teszteld a tudásodat a selmeci hagyományokról, a szakestélyekről "
+        "és az egyenruhákról."
+    )
+
+    st.subheader("Leaderboard")
+    leaderboard = get_leaderboard()
+    if leaderboard:
+        st.table(
+            [
+                {
+                    "Helyezés": index,
+                    "Név": name,
+                    "Pontszám": f"{score} / {total}",
+                }
+                for index, (name, score, total) in enumerate(leaderboard, start=1)
+            ]
+        )
+    else:
+        st.info("Még nincs eredmény a ranglistán. Légy te az első!")
+
+    if st.button("Készülj fel!", type="primary", use_container_width=True):
+        st.session_state.page = "quiz"
+        st.session_state.quiz_questions = None
+        st.session_state.user_answers = {}
+        st.session_state.current_question = 0
+        st.session_state.submitted = False
+        st.session_state.leaderboard_saved = False
+        st.rerun()
+    st.stop()
 
 
 st.title("balekvizsgára")
 
 # 50 véletlenszerű kérdés kiválasztása és a válaszlehetőségek megkeverése munkamenetenként egyszer
-if "quiz_questions" not in st.session_state:
+if not st.session_state.get("quiz_questions"):
     sample_size = min(50, len(ALL_QUESTIONS))
     selected = random.sample(ALL_QUESTIONS, sample_size)
 
@@ -1159,6 +1251,8 @@ if "user_answers" not in st.session_state:
     st.session_state.user_answers = {}
 if "submitted" not in st.session_state:
     st.session_state.submitted = False
+if "leaderboard_saved" not in st.session_state:
+    st.session_state.leaderboard_saved = False
 
 if st.session_state.submitted:
     score = sum(
@@ -1183,8 +1277,24 @@ if st.session_state.submitted:
         st.error(f"A te válaszod: '{valasz_szoveg}'. A helyes válasz: '{q['answer']}'.")
         st.info(f"**Miért volt hibás?** {build_wrong_answer_explanation(q, user_ans)}")
 
-    if st.button("Új 50 kérdéses kvíz indítása"):
+    if not st.session_state.leaderboard_saved:
+        st.subheader("Felkerüljön az eredményed a leaderboardra?")
+        wants_to_join = st.checkbox("Igen, szeretném beküldeni az eredményemet.")
+        if wants_to_join:
+            leaderboard_name = st.text_input("Név a leaderboardon", max_chars=30)
+            if st.button("Eredmény beküldése", disabled=not leaderboard_name.strip()):
+                save_leaderboard_entry(
+                    leaderboard_name.strip(),
+                    score,
+                    len(st.session_state.quiz_questions),
+                )
+                st.session_state.leaderboard_saved = True
+                st.success("Az eredményed felkerült a leaderboardra!")
+                st.rerun()
+
+    if st.button("Vissza a kezdőlapra"):
         st.session_state.clear()
+        st.session_state.page = "welcome"
         st.rerun()
 else:
     question_index = st.session_state.get("current_question", 0)
