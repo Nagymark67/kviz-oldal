@@ -1305,7 +1305,7 @@ if st.session_state.page == "welcome":
         st.session_state.leaderboard_saved = False
         st.rerun()
 
-    st.subheader("Leaderboard")
+    st.subheader("Ranglista")
     leaderboard_sort = st.radio(
         "Rendezés",
         options=["score", "time"],
@@ -1386,10 +1386,10 @@ if st.session_state.submitted:
         st.error(f"A te válaszod: '{valasz_szoveg}'. A helyes válasz: '{q['answer']}'.")
         st.info(f"**Miért volt hibás?** {build_wrong_answer_explanation(q, user_ans)}")
     if not st.session_state.leaderboard_saved:
-        st.subheader("Felkerüljön az eredményed a leaderboardra?")
+        st.subheader("Felkerüljön az eredményed a ranglistára?")
         wants_to_join = st.checkbox("Igen, szeretném beküldeni az eredményemet.")
         if wants_to_join:
-            leaderboard_name = st.text_input("Név a leaderboardon", max_chars=30)
+            leaderboard_name = st.text_input("Név a ranglistán", max_chars=30)
             if st.button("Eredmény beküldése", disabled=not leaderboard_name.strip()):
                 saved = save_leaderboard_entry(
                     leaderboard_name.strip(),
@@ -1399,10 +1399,10 @@ if st.session_state.submitted:
                 )
                 if saved:
                     st.session_state.leaderboard_saved = True
-                    st.success("Az eredményed felkerült a leaderboardra!")
+                    st.success("Az eredményed felkerült a ranglistára!")
                     st.rerun()
                 else:
-                    st.error("Ezzel a névvel már szerepel eredmény a leaderboardon.")
+                    st.error("Ezzel a névvel már szerepel eredmény a ranglistán.")
 
     if st.button("Vissza a kezdőlapra"):
         st.session_state.clear()
