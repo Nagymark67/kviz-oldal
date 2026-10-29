@@ -78,13 +78,16 @@ st.markdown("""
         background: radial-gradient(ellipse at 50% 45%, rgba(255, 55, 75, 0.3), rgba(255, 55, 75, 0.11) 36%, transparent 76%);
     }
     [class*="st-key-question-report-"] {
-        margin: -0.3rem 0 0.8rem;
+        margin: 0.15rem 0 0.35rem;
     }
     [class*="st-key-question-report-"] button {
         border-color: rgba(255, 180, 90, 0.8);
         color: #ffc078;
-        padding: 0.45rem 0.7rem;
-        font-size: 0.85rem;
+        min-height: 2.35rem;
+        padding: 0.45rem 0.8rem;
+        font-size: 0.78rem;
+        line-height: 1.15;
+        white-space: nowrap;
     }
     [class*="st-key-question-report-"] button:hover:enabled {
         background-color: rgba(255, 180, 90, 0.12);
@@ -1373,7 +1376,7 @@ else:
 
     with st.container(key=f"question-slide-{question_index}"):
         st.progress((question_index + 1) / question_count)
-        report_button_column = st.columns([3, 1])[1]
+        report_button_column = st.columns([2, 1])[1]
         with report_button_column:
             with st.container(key=f"question-report-{question_index}"):
                 render_question_report_button(question, f"quiz-{question_index}")
