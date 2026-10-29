@@ -1,6 +1,8 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import random
 import sqlite3
+import json
 from pathlib import Path
 from urllib.parse import quote
 
@@ -95,6 +97,9 @@ st.markdown("""
         background-color: rgba(255, 180, 90, 0.12);
         color: #ffe0b2;
         box-shadow: 0 0 12px rgba(255, 180, 90, 0.25);
+    }
+    [class*="st-key-report-form-"] [data-testid="stFormSubmitButton"] {
+        display: none;
     }
     @media (prefers-reduced-motion: reduce) {
         [class*="st-key-question-slide-"], .answer-burst { animation: none; }
@@ -522,20 +527,7 @@ ALL_QUESTIONS = [
         "answer": "0: Firmádnak mindig igaza van! 6: ne légy konfidens! 9: Firmák asztalához csakis engedéllyel ülj!",
         "explanation": "A 0. parancsolat: Firmádnak mindig igaza van! A 6.: ne légy konfidens! A 9.: Firmák asztalához csakis engedéllyel ülj!"
     },
-    {
-        "question": "Honnan ered a másodévesek 'kohlenbrenner' (szénégető) elnevezése?",
-        "options": ["A II. évben tanulták a vegytant és a mesterséges szénelőállítást", "Ők fűtötték a kollégiumi kazánokat", "A bányában csak szenet lapátolhattak", "Fekete korommal kenték be az arcukat"],
-        "answer": "A II. évben tanulták a vegytant és a mesterséges szénelőállítást",
-        "explanation": "Selmecbányán a II. évben tanulták a hallgatók a vegytant és ezzel együtt a mesterséges szénelőállítást."
-    },
-
     # 61-75: balekság, Valétálás és Szakestélyek
-    {
-        "question": "Kit neveztek eredetileg Selmecen 'Filiszternek', és kit nevezünk így ma?",
-        "options": ["Régen a diákság jókedve előtt értetlenül álló polgárt, ma az elvalétált (végzett) hallgatót", "Régen az elsőéves diákot, ma a professzorokat", "Régen a kocsmárost, ma a Valétaelnököt", "Régen a bukott diákot, ma a Veteránt"],
-        "answer": "Régen a diákság jókedve előtt értetlenül álló polgárt, ma az elvalétált (végzett) hallgatót",
-        "explanation": "Hajdanán a nyársat nyelt polgárokat hívták így, ma a diákéletet elhagyó, elvalétált egykori hallgatókat."
-    },
     {
         "question": "Mi a balekjelölt életének három ballépése, amiért bal lábbal kell belépnie a balekvizsgára?",
         "options": ["1. Megszületett, 2. Beiratkozott az egyetemre, 3. Belép a balekvizsgára", "1. Érettségit tett, 2. Kollégista lett, 3. Megbukott a zh-n", "1. Pogány volt, 2. balek lett, 3. Kohlenbrenner lesz", "1. Ivott a szakestélyen, 2. Kiment nóta alatt, 3. Elfelejtette a tízparancsolatot"],
@@ -553,18 +545,6 @@ ALL_QUESTIONS = [
         "options": ["Az országos főerdőmester", "A főkamaragróf", "Mária Terézia", "Az akadémia rektora"],
         "answer": "Az országos főerdőmester",
         "explanation": "Az országos főerdőmester látogatásakor a Firmák szándékosan téves szakszavakkal tűzdelt beszédet írattak egy törtető balekkal."
-    },
-    {
-        "question": "Mit mond a keresztapa és mit mond utána a keresztanya a balekkeresztelőn?",
-        "options": ["A keresztapa 'vulgo'-t mond, a keresztanya utána 'avagy'-t mond", "A keresztapa 'avagy'-t mond, a keresztanya utána 'vulgo'-t mond", "Mindketten 'vulgo'-t mondanak", "A keresztapa 'cimbora'-t, a keresztanya 'fuchs'-ot mond"],
-        "answer": "A keresztapa 'vulgo'-t mond, a keresztanya utána 'avagy'-t mond",
-        "explanation": "A PDF szerint a keresztapa a vulgo nevet mondja ki, majd a keresztanya utána az 'avagy' formulával adja meg a második nevet."
-    },
-    {
-        "question": "Mit jelent a latin eredetű 'Valete!' szó?",
-        "options": ["Éljetek boldogul!", "Jó szerencsét!", "Igyunk fenékig!", "Örvendezzünk!"],
-        "answer": "Éljetek boldogul!",
-        "explanation": "A Valétálás a latin 'Valete' szóból ered, melynek jelentése: Éljetek Boldogul!"
     },
     {
         "question": "Meddig kötelesek viselni a valétálók a bal karjukra feltűzött Valétaszalagot Miskolcon, illetve Sopronban?",
@@ -638,18 +618,6 @@ ALL_QUESTIONS = [
         "answer": "A szakestély témáját érintő felszólalás, amely megadja a komoly rész alaphangját",
         "explanation": "A Komoly pohár a szakestély témáját érintő első felszólalás; ezt további beszédek és nóták követik a szünet, vagyis a Silentium Eks előtt."
     },
-    {
-        "question": "Ki hitelesíti a Háznagy által felolvasott Házirendet a szakestélyen?",
-        "options": ["A legidősebb Firma (keresztelkedés szerint) aláírásával és sörével", "A Praeses és a Contrapunkt", "A díszbalek és a Fuchsmajor", "Az egyetem rektora vagy dékánja"],
-        "answer": "A legidősebb Firma (keresztelkedés szerint) aláírásával és sörével",
-        "explanation": "A Házirendet a keresztelkedés szerint legidősebb jelenlévő Firma hitelesíti aláírásával és sörével."
-    },
-    {
-        "question": "Melyik nóta jelzi a szakestély szünetének végét Miskolcon, illetve Sopronban?",
-        "options": ["Miskolcon: Steingrubeni induló, Sopronban: Szerencse fel a tárna vár", "Miskolcon: Gaudeamus igitur, Sopronban: Steingrubeni induló", "Mindkét helyen a Sza-sza-szakestély", "Miskolcon: Ballag már a vén diák, Sopronban: Visszapillantás"],
-        "answer": "Miskolcon: Steingrubeni induló, Sopronban: Szerencse fel a tárna vár",
-        "explanation": "A szünet (Silentium Eks) végét általában a Steingrubeni induló ('Ha Steingrubéba óra vóna...'), míg Sopronban a 'Szerencse fel a tárna vár' jelzi."
-    },
 
     # 76-90: Szakestély szabályok, Gyászszakestély, Köszöntések, Jelképek, Egyenruhák
     {
@@ -669,12 +637,6 @@ ALL_QUESTIONS = [
         "options": ["A szakestély alatt 20 korsó sör, majd a végén még 5 liter Eks!-re", "A szakestély alatt 10 korsó sör és 1 liter krampampuli", "24 óra alatt 24 korsó sör", "A szakestély alatt 15 korsó sör sörpárbajokban"],
         "answer": "A szakestély alatt 20 korsó sör, majd a végén még 5 liter Eks!-re",
         "explanation": "A delikvensnek a szakestély ideje alatt 20 korsó sört kell elfogyasztania, majd ennek végeztével még 5 litert Eks!-re."
-    },
-    {
-        "question": "Mi volt a 'reibolás' a Gyászszakestélyen?",
-        "options": ["A korsó kopogtatása (2 hosszú, 3 rövid), asztalhoz dörzsölése (6-7-szer), majd az asztal széléhez vágva összetörése", "A fehér gyászszalagok elégetése a krampampulis tálban", "A bányászlámpák egyszerre történő elfújása", "A koporsó háromszori megemelése a sírgödörnél"],
-        "answer": "A korsó kopogtatása (2 hosszú, 3 rövid), asztalhoz dörzsölése (6-7-szer), majd az asztal széléhez vágva összetörése",
-        "explanation": "A reibolás során az üres korsót kopogtatták, az asztalhoz dörzsölték, majd összetörték, a fülét pedig fekete szalaggal átkötve emlékül hazavitték."
     },
     {
         "question": "Melyik évben fogadták el hivatalosan az OMBKE választmányi ülésén a Péch Antal által 1879-ben megalkotott 'Jó szerencsét!' köszöntést?",
@@ -701,22 +663,10 @@ ALL_QUESTIONS = [
         "explanation": "A szakirodalom alapján a Gruben elődje a Bibertárói ruha (Biberstollen), a Bányaingé pedig a Freibergi fekete ruha."
     },
     {
-        "question": "Melyik évben egységesítették véglegesen az akadémiai egyenruhákat az Erdészeti palota átadásakor?",
-        "options": ["1892-ben", "1839-ben", "1884-ben", "1900-ban"],
-        "answer": "1892-ben",
-        "explanation": "Az Erdészeti palota átadásakor, 1892-ben egységesítették véglegesen a ma is ismert egyenruhákat."
-    },
-    {
         "question": "Hány gomb és milyen válltömés található a miskolci bányászok és kohászok Grubenen?",
         "options": ["Elöl 5 nagy, mellzsebeken 2 kis, hátul 3-3 nagy gomb; a vállon 4-5 függőleges és 3 vízszintes hurka", "Elöl 7 nagy, hátul 2-2 kis gomb; a vállon 3 függőleges és 3 vízszintes hurka", "Elöl 5 nagy, kézelőn 3-3 kis gomb; válltömés nélkül", "Elöl 8-10 kis gomb, mellen 5-5 kis gomb; vállrojtozással"],
         "answer": "Elöl 5 nagy, mellzsebeken 2 kis, hátul 3-3 nagy gomb; a vállon 4-5 függőleges és 3 vízszintes hurka",
         "explanation": "A Gruben elől 5 nagy, a mellzsebeken 2 kis, hátul 3-3 nagy bányászgombbal rendelkezik, vállát 4-5 függőleges és 3 vízszintes hurka vastagítja."
-    },
-    {
-        "question": "Milyen színű paszományt viselnek a bányászok és a kohászok a Grubenen?",
-        "options": ["Bányászok: fekete, kohászok: meggypiros", "Bányászok: meggypiros, kohászok: fekete", "Bányászok: zöld, kohászok: sötétkék", "Mindkét szak: aranyszínű"],
-        "answer": "Bányászok: fekete, kohászok: meggypiros",
-        "explanation": "A Gruben fekete alapú; a bányászok fekete, a kohászok meggypiros paszományt viselnek."
     },
     {
         "question": "Milyen volt az erdészek 1839-ben engedélyezett egyenruhája?",
@@ -725,34 +675,10 @@ ALL_QUESTIONS = [
         "explanation": "A kamara 1839-ben zöld egyenruha viselését engedélyezte az erdészeknek, világosabb zöld gallérral és hajtókával, ezüst beszegéssel és ezüst gombokkal."
     },
     {
-        "question": "Miben tér el a dunaújvárosi Aufhauer a miskolcitól?",
-        "options": ["Hiányzik róla a hátsó hasíték és a 6 kisgomb, viszont van egy mellzsebe a jobb oldalon", "Nem 5, hanem 7 nagy gombbal gombolódik elöl", "Ezüst gombok vannak rajta arany helyett", "Válltömések találhatók rajta, mint a Grubenen"],
-        "answer": "Hiányzik róla a hátsó hasíték és a 6 kisgomb, viszont van egy mellzsebe a jobb oldalon",
-        "explanation": "A dunaújvárosi Aufról hiányzik a hátsó hasíték és a hat kisgomb, viszont rendelkezik egy mellzsebbel a jobb oldalon."
-    },
-    {
-        "question": "Milyen színű a Walden alapanyaga, és milyen színű paszományt viselnek rajta az erdészek, a faiparosok és a geodéták?",
-        "options": ["Őzbarna alap; Erdész: zöld, Fás: fekete, Geodéta: sötétkék paszomány", "Palackzöld alap; Erdész: barna, Fás: fekete, Geodéta: kék paszomány", "Őzbarna alap; Erdész: fekete, Fás: zöld, Geodéta: piros paszomány", "Fekete alap; Erdész: zöld, Fás: barna, Geodéta: sárga paszomány"],
-        "answer": "Őzbarna alap; Erdész: zöld, Fás: fekete, Geodéta: sötétkék paszomány",
-        "explanation": "A Walden őzbarna anyagból készül; az erdészek zöld, a fások fekete, a székesfehérvári geodéták sötétkék paszománnyal viselik."
-    },
-    {
         "question": "Melyik szakok egyenruhája/egyenviselete az Atilla, a Veblen, a Jurátus, az Aurum és a Stefánia?",
         "options": ["Atilla: erdész díszegyenruha, Veblen: soproni közgazdász, Jurátus: miskolci jogász, Aurum: miskolci gazdász, Stefánia: miskolci egészségügyis", "Atilla: miskolci bölcsész, Veblen: miskolci gazdász, Jurátus: jogász, Aurum: soproni közgazdász, Stefánia: dunaújvárosi tanár", "Atilla: bányász díszruha, Veblen: geodéta, Jurátus: jogász, Aurum: kohász, Stefánia: bölcsész", "Atilla: erdész, Veblen: faiparos, Jurátus: gépész, Aurum: gazdász, Stefánia: zenész"],
         "answer": "Atilla: erdész díszegyenruha, Veblen: soproni közgazdász, Jurátus: miskolci jogász, Aurum: miskolci gazdász, Stefánia: miskolci egészségügyis",
         "explanation": "Atilla: erdész díszegyenruha, Veblen: soproni közgazdász (1999), Jurátus: miskolci jogász (2002), Aurum: miskolci gazdász, Stefánia: miskolci egészségügyis (2005)."
-    },
-    {
-        "question": "Hogyan lehet 'levenni' a Tempus-foltot az egyenruháról, ha a kapcsolat mégsem végződik házassággal?",
-        "options": ["Csak az egyenruha anyagával és bélésével együtt kivágva, és a helye csak nagyobb Tempusszal foltozható be", "Le kell fejteni a cérnát és fekete posztóval befoltozni", "A Fuchsmajornak kell leégetnie egy szakestélyen", "Át kell húzni egy fekete szalaggal"],
-        "answer": "Csak az egyenruha anyagával és bélésével együtt kivágva, és a helye csak nagyobb Tempusszal foltozható be",
-        "explanation": "A Tempust csak anyaggal és béléssel együtt kivágva lehet eltávolítani, és a helye nem foltozható be (csak egy másik, nagyobb Tempus folttal)."
-    },
-    {
-        "question": "Hogyan viselték a farbőrt (arschleder) a bányászok, illetve a kohászok?",
-        "options": ["A bányászok hátul, a kohászok elöl (kötényként)", "A bányászok elöl, a kohászok hátul", "Mindketten hátul viselték", "A bányászok a vállukon, a kohászok a derekukon"],
-        "answer": "A bányászok hátul, a kohászok elöl (kötényként)",
-        "explanation": "A bányászok a hátsó felükön hordták (ezen csúsztak le a vágatokba), míg a kohászok fordítva, kötényként viselték."
     },
 
     # 91-100: Nóták, Diáknapok, Szakmai szervezetek, Tolások és Fogalmak
@@ -1224,11 +1150,20 @@ def render_question_report_form(report_key):
         st.warning(
             f"Jelentett kérdés: **{report_question['question']}**"
         )
-        report_text = st.text_area(
-            "Írd le, mi lenne helyes, vagy mi a probléma!",
-            key="report_text",
-        )
-        if report_text.strip():
+        with st.form(
+            key=f"report-form-{report_key}",
+            clear_on_submit=False,
+            enter_to_submit=True,
+        ):
+            report_text = st.text_area(
+                "Írd le, mi lenne helyes, vagy mi a probléma!",
+                key="report_text",
+            )
+            submitted = st.form_submit_button(
+                "Jelentés elküldése",
+                key=f"report-submit-{report_key}",
+            )
+        if submitted and report_text.strip():
             options = "\n".join(
                 f"- {option}" for option in report_question["options"]
             )
@@ -1245,10 +1180,14 @@ def render_question_report_form(report_key):
                 f"?subject={quote('balekvizsga kérdés javítása')}"
                 f"&body={quote(email_body)}"
             )
-            st.link_button(
-                "Jelentés megnyitása az e-mailben",
-                mailto_url,
-                use_container_width=True,
+            components.html(
+                f"""
+                <script>
+                    window.top.location.href = {json.dumps(mailto_url)};
+                </script>
+                <a href={json.dumps(mailto_url)}>E-mail megnyitása</a>
+                """,
+                height=28,
             )
 
 
@@ -1259,10 +1198,11 @@ if "page" not in st.session_state:
 
 if st.session_state.page == "welcome":
     st.title("balekvizsgára")
-    st.subheader("Üdvözöllek a balekvizsgán!")
+    st.subheader("Üdvözöllek a balekvizsga felkészítő oldalon!")
     st.write(
-        "Teszteld a tudásodat a selmeci hagyományokról, a szakestélyekről "
-        "és az egyenruhákról."
+        "Teszteld a tudásodat a selmeci hagyományokról! Nagyon fontos "
+        "megjegyzés: Az itt feltett összes kérdésre adott helyes válasz nem "
+        "garantálja a sikeres balekvizsgát!"
     )
 
     if st.button("Készülj fel!", type="primary", use_container_width=True):
