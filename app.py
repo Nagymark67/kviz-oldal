@@ -3,6 +3,7 @@ import streamlit.components.v1 as components
 import random
 import sqlite3
 import json
+import time
 from pathlib import Path
 
 st.set_page_config(page_title="balekvizsgára", layout="centered")
@@ -1074,23 +1075,39 @@ def initialize_leaderboard():
                 name TEXT NOT NULL,
                 score INTEGER NOT NULL,
                 total INTEGER NOT NULL,
+                duration_seconds REAL,
                 created_at TEXT NOT NULL
             )
             """
         )
+        columns = {
+            row[1]
+            for row in connection.execute("PRAGMA table_info(leaderboard)")
+        }
+        if "duration_seconds" not in columns:
+            connection.execute(
+                "ALTER TABLE leaderboard ADD COLUMN duration_seconds REAL"
+            )
         connection.commit()
     finally:
         connection.close()
 
 
-def get_leaderboard():
+def get_leaderboard(sort_by="score"):
+    order_by = (
+        "duration_seconds IS NULL ASC, duration_seconds ASC, "
+        "score * 1.0 / total DESC, score DESC"
+        if sort_by == "time"
+        else "score * 1.0 / total DESC, score DESC, "
+        "duration_seconds IS NULL ASC, duration_seconds ASC"
+    )
     connection = sqlite3.connect(LEADERBOARD_DB)
     try:
         return connection.execute(
-            """
-            SELECT name, score, total
+            f"""
+            SELECT name, score, total, duration_seconds
             FROM leaderboard
-            ORDER BY score * 1.0 / total DESC, score DESC, created_at ASC
+            ORDER BY {order_by}, created_at ASC
             LIMIT 10
             """
         ).fetchall()
@@ -1098,19 +1115,40 @@ def get_leaderboard():
         connection.close()
 
 
-def save_leaderboard_entry(name, score, total):
+def save_leaderboard_entry(name, score, total, duration_seconds):
     connection = sqlite3.connect(LEADERBOARD_DB)
     try:
+        duplicate = connection.execute(
+            """
+            SELECT 1
+            FROM leaderboard
+            WHERE lower(trim(name)) = lower(trim(?))
+            LIMIT 1
+            """,
+            (name,),
+        ).fetchone()
+        if duplicate is not None:
+            return False
         connection.execute(
             """
-            INSERT INTO leaderboard (name, score, total, created_at)
-            VALUES (?, ?, ?, datetime('now'))
+            INSERT INTO leaderboard
+                (name, score, total, duration_seconds, created_at)
+            VALUES (?, ?, ?, ?, datetime('now'))
             """,
-            (name, score, total),
+            (name, score, total, duration_seconds),
         )
         connection.commit()
+        return True
     finally:
         connection.close()
+
+
+def format_duration(duration_seconds):
+    if duration_seconds is None:
+        return "—"
+    total_seconds = max(0, round(duration_seconds))
+    minutes, seconds = divmod(total_seconds, 60)
+    return f"{minutes}:{seconds:02d}"
 
 
 def build_wrong_answer_explanation(question, user_answer):
@@ -1131,13 +1169,18 @@ def build_wrong_answer_explanation(question, user_answer):
 
 def render_question_report_button(question, report_key):
     if st.button("Hibáztam? Segíts kijavítani!", key=f"report-button-{report_key}"):
-        st.session_state.report_question = {
-            "report_key": report_key,
-            "question": question["question"],
-            "options": question["options"],
-            "answer": question["answer"],
-        }
-        st.session_state.report_text = ""
+        report_question = st.session_state.get("report_question")
+        if report_question is not None and report_question["report_key"] == report_key:
+            st.session_state.pop("report_question")
+            st.session_state.pop("report_text", None)
+        else:
+            st.session_state.report_question = {
+                "report_key": report_key,
+                "question": question["question"],
+                "options": question["options"],
+                "answer": question["answer"],
+            }
+            st.session_state.report_text = ""
 
 
 def render_question_report_form(report_key):
@@ -1257,12 +1300,19 @@ if st.session_state.page == "welcome":
         st.session_state.quiz_questions = None
         st.session_state.user_answers = {}
         st.session_state.current_question = 0
+        st.session_state.quiz_started_at = time.monotonic()
         st.session_state.submitted = False
         st.session_state.leaderboard_saved = False
         st.rerun()
 
     st.subheader("Leaderboard")
-    leaderboard = get_leaderboard()
+    leaderboard_sort = st.radio(
+        "Rendezés",
+        options=["score", "time"],
+        format_func=lambda value: "Pontszám" if value == "score" else "Idő",
+        horizontal=True,
+    )
+    leaderboard = get_leaderboard(leaderboard_sort)
     if leaderboard:
         st.table(
             [
@@ -1270,8 +1320,10 @@ if st.session_state.page == "welcome":
                     "Helyezés": index,
                     "Név": name,
                     "Pontszám": f"{score} / {total}",
+                    "Idő": format_duration(duration_seconds),
                 }
-                for index, (name, score, total) in enumerate(leaderboard, start=1)
+                for index, (name, score, total, duration_seconds)
+                in enumerate(leaderboard, start=1)
             ]
         )
     else:
@@ -1306,6 +1358,8 @@ if "submitted" not in st.session_state:
     st.session_state.submitted = False
 if "leaderboard_saved" not in st.session_state:
     st.session_state.leaderboard_saved = False
+if "quiz_started_at" not in st.session_state:
+    st.session_state.quiz_started_at = time.monotonic()
 
 if st.session_state.submitted:
     score = sum(
@@ -1313,6 +1367,8 @@ if st.session_state.submitted:
         for i, q in enumerate(st.session_state.quiz_questions)
     )
     st.metric(label="Végső pontszám", value=f"{score} / {len(st.session_state.quiz_questions)}")
+    duration_seconds = st.session_state.get("quiz_duration_seconds")
+    st.metric(label="Kitöltési idő", value=format_duration(duration_seconds))
     st.subheader("Gyakorolandó kérdések")
 
     incorrect_questions = [
@@ -1335,14 +1391,18 @@ if st.session_state.submitted:
         if wants_to_join:
             leaderboard_name = st.text_input("Név a leaderboardon", max_chars=30)
             if st.button("Eredmény beküldése", disabled=not leaderboard_name.strip()):
-                save_leaderboard_entry(
+                saved = save_leaderboard_entry(
                     leaderboard_name.strip(),
                     score,
                     len(st.session_state.quiz_questions),
+                    duration_seconds,
                 )
-                st.session_state.leaderboard_saved = True
-                st.success("Az eredményed felkerült a leaderboardra!")
-                st.rerun()
+                if saved:
+                    st.session_state.leaderboard_saved = True
+                    st.success("Az eredményed felkerült a leaderboardra!")
+                    st.rerun()
+                else:
+                    st.error("Ezzel a névvel már szerepel eredmény a leaderboardon.")
 
     if st.button("Vissza a kezdőlapra"):
         st.session_state.clear()
@@ -1420,6 +1480,9 @@ else:
                     disabled=selected_answer is None,
                     use_container_width=True,
                 ):
+                    st.session_state.quiz_duration_seconds = (
+                        time.monotonic() - st.session_state.quiz_started_at
+                    )
                     st.session_state.submitted = True
                     st.rerun()
             elif st.button(
