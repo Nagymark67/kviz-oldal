@@ -483,6 +483,18 @@ ALL_QUESTIONS = [
         "explanation": "Firmaőseink fisch-nek (halnak) nevezték, mert a hal is bután néz, némán tátog és senki sem érti mit akar."
     },
     {
+        "question": "Hogyan határozza meg a hagyomány tréfásan a 'balek' fogalmát?",
+        "options": ["Zöldfülű, sárgacsőrű, büdös, poros hajú és értelem nélküli védtelen, aki a Firmák támogatására szorul", "Olyan végzett hallgató, aki már elhagyta az egyetemet", "A szakestélyt levezető, legmagasabb rangú tisztségviselő", "A másodéves hallgató, aki már Firmává keresztelkedett"],
+        "answer": "Zöldfülű, sárgacsőrű, büdös, poros hajú és értelem nélküli védtelen, aki a Firmák támogatására szorul",
+        "explanation": "A PDF a balekot humorosan így írja le: a Firmák támogatására szoruló, keresztelésen frissen átesett diák."
+    },
+    {
+        "question": "Kit neveznek Firmának a selmeci hagyományban?",
+        "options": ["A hagyomány szerint a harmadéves, megkeresztelkedett hallgatót", "Az elsőéves, még meg nem keresztelkedett hallgatót", "A szakestélyen a nótákat vezető tisztségviselőt", "A tanulmányait befejező, elvalétált hallgatót"],
+        "answer": "A hagyomány szerint a harmadéves, megkeresztelkedett hallgatót",
+        "explanation": "A selmeci akadémiai hierarchiában a harmadéveseket tekintették Firmának; a hagyomány ma is a keresztelkedést tekinti ennek feltételéül."
+    },
+    {
         "question": "Mi a balek tízparancsolatának 0., 6. és 9. pontja?",
         "options": ["0: Firmádnak mindig igaza van! 6: ne légy konfidens! 9: Firmák asztalához csakis engedéllyel ülj!", "0: kussch! 6: ne légy falánk! 9: válassz magadnak Firmát!", "0: mutatkozz be! 6: illedelmesen köszönj! 9: házi nyúlra nem lövünk!", "0: légy illedelmes! 6: kussch! 9: ne kívánd Firmád nőjét!"],
         "answer": "0: Firmádnak mindig igaza van! 6: ne légy konfidens! 9: Firmák asztalához csakis engedéllyel ülj!",
@@ -575,6 +587,36 @@ ALL_QUESTIONS = [
         "explanation": "Mivel a Praeses tévedhetetlen, a Konzekvencia vonja le a következtetést egy teli korsó fenékig ürítésével (a teli korsóról a Leibfuchs/Garatőr, a világításról a Kandeláber, a pótlásról a Fuhrwerk gondoskodik)."
     },
     {
+        "question": "Mi a Major Domus (Háznagy) feladata a szakestélyen?",
+        "options": ["Előkészíti és megszervezi a szakestélyt, valamint felolvassa a Házirendet", "Fogadja az érkezőket és rendet tart a balekok között", "A felszólalók mellett gondoskodik a megfelelő világításról", "Az asztalokon pótolja az ételt és az italt"],
+        "answer": "Előkészíti és megszervezi a szakestélyt, valamint felolvassa a Házirendet",
+        "explanation": "A Major Domus az Elnök jobbkeze: előkészíti és megszervezi az estét, megírja és felolvassa a Házirendet, szükség esetén pedig helyettesíti a Praesest."
+    },
+    {
+        "question": "Mi a Fuchsmajor (Balekcsősz) feladata?",
+        "options": ["Fogadja az érkezőket, fenntartja a rendet, és közvetít az Elnök és a balekok között", "A szakestély témáját adó első pohárbeszédet tartja", "Az Elnök tévedései után fenékig üríti a korsóját", "Megírja és felolvassa a szakestély Házirendjét"],
+        "answer": "Fogadja az érkezőket, fenntartja a rendet, és közvetít az Elnök és a balekok között",
+        "explanation": "A Fuchsmajor fogadja az érkezőket, gondoskodik a rendről, és rajta keresztül kommunikál az Elnök a balekokkal."
+    },
+    {
+        "question": "Milyen feladatot lát el a Kandeláber a szakestélyen?",
+        "options": ["Világítást biztosít a felszólalónak, hogy jól lássa a mondandóját", "Teli korsót biztosít a tisztségviselőknek", "Az asztalokon pótolja az ételt és az italt", "A szakestély nótáit intonálja"],
+        "answer": "Világítást biztosít a felszólalónak, hogy jól lássa a mondandóját",
+        "explanation": "Az Elnök jelöl ki egy-egy Kandelábert a felszólalók mellé, hogy azok lássák a mondandójukat, és mindenki jól láthassa őket."
+    },
+    {
+        "question": "Mi történik a szakestély elején, mielőtt a megválasztott Elnök átveszi a Praesidiumot?",
+        "options": ["A világítás lekapcsolása után a Cantus elkezdi a 'Sza-sza-szakestély' nótát, majd a jelenlévők megválasztják az Elnököt", "A Háznagy felolvassa a Házirendet, majd mindenki elénekli a Bányász himnuszt", "A Fuchsmajor kihirdeti a szünetet, majd a Cantus felolvassa a tisztségviselőket", "A Pater Krampampuli elkészíti italát, majd a Firmák kiosztják a szalagokat"],
+        "answer": "A világítás lekapcsolása után a Cantus elkezdi a 'Sza-sza-szakestély' nótát, majd a jelenlévők megválasztják az Elnököt",
+        "explanation": "Miután mindenki elfoglalta a helyét és a Háznagy jóváhagyta, lekapcsolják a világítást. A Cantus elkezdi a 'Sza-sza-szakestély' nótát; az Elnök megválasztásáig a dalban az 'Előnökünk' szerepel."
+    },
+    {
+        "question": "Mi a szakestély első felszólalásának, a 'Komoly pohárnak' a szerepe?",
+        "options": ["A szakestély témáját érintő felszólalás, amely megadja a komoly rész alaphangját", "A Házirend hitelesítése a legidősebb Firma által", "A nótaszünet végét jelző köszöntés", "A szakestély végén elhangzó Valete-beszéd"],
+        "answer": "A szakestély témáját érintő felszólalás, amely megadja a komoly rész alaphangját",
+        "explanation": "A Komoly pohár a szakestély témáját érintő első felszólalás; ezt további beszédek és nóták követik a szünet, vagyis a Silentium Eks előtt."
+    },
+    {
         "question": "Ki hitelesíti a Háznagy által felolvasott Házirendet a szakestélyen?",
         "options": ["A legidősebb Firma (keresztelkedés szerint) aláírásával és sörével", "A Praeses és a Contrapunkt", "A díszbalek és a Fuchsmajor", "Az egyetem rektora vagy dékánja"],
         "answer": "A legidősebb Firma (keresztelkedés szerint) aláírásával és sörével",
@@ -647,6 +689,18 @@ ALL_QUESTIONS = [
         "options": ["Elöl 5 nagy, mellzsebeken 2 kis, hátul 3-3 nagy gomb; a vállon 4-5 függőleges és 3 vízszintes hurka", "Elöl 7 nagy, hátul 2-2 kis gomb; a vállon 3 függőleges és 3 vízszintes hurka", "Elöl 5 nagy, kézelőn 3-3 kis gomb; válltömés nélkül", "Elöl 8-10 kis gomb, mellen 5-5 kis gomb; vállrojtozással"],
         "answer": "Elöl 5 nagy, mellzsebeken 2 kis, hátul 3-3 nagy gomb; a vállon 4-5 függőleges és 3 vízszintes hurka",
         "explanation": "A Gruben elől 5 nagy, a mellzsebeken 2 kis, hátul 3-3 nagy bányászgombbal rendelkezik, vállát 4-5 függőleges és 3 vízszintes hurka vastagítja."
+    },
+    {
+        "question": "Milyen színű paszományt viselnek a bányászok és a kohászok a Grubenön?",
+        "options": ["Bányászok: fekete, kohászok: meggypiros", "Bányászok: meggypiros, kohászok: fekete", "Bányászok: zöld, kohászok: sötétkék", "Mindkét szak: aranyszínű"],
+        "answer": "Bányászok: fekete, kohászok: meggypiros",
+        "explanation": "A Gruben fekete alapú; a bányászok fekete, a kohászok meggypiros paszományt viselnek."
+    },
+    {
+        "question": "Milyen volt az erdészek 1839-ben engedélyezett egyenruhája?",
+        "options": ["Zöld, világosabb zöld gallérral és hajtókával, ezüst beszegéssel és ezüst gombokkal", "Fekete, meggypiros paszománnyal és arany gombokkal", "Őzbarna, sötétkék gallérral és fekete gombokkal", "Szürke, állógalléros, négy zsebbel és ezüst paszománnyal"],
+        "answer": "Zöld, világosabb zöld gallérral és hajtókával, ezüst beszegéssel és ezüst gombokkal",
+        "explanation": "A kamara 1839-ben zöld egyenruha viselését engedélyezte az erdészeknek, világosabb zöld gallérral és hajtókával, ezüst beszegéssel és ezüst gombokkal."
     },
     {
         "question": "Miben tér el a dunaújvárosi Aufhauer a miskolcitól?",
@@ -739,8 +793,347 @@ ALL_QUESTIONS = [
         "options": ["Állományjelzővel felfelé, a sapka 'szája' pedig a váll felé nézzen", "Állományjelzővel lefelé, a sapka 'szája' a mellkas felé nézzen", "A gombokkal kifelé, a sapka 'szája' lefelé nézzen", "A jobb vállon, állományjelzővel hátrafelé"],
         "answer": "Állományjelzővel felfelé, a sapka 'szája' pedig a váll felé nézzen",
         "explanation": "A Selmeci sapka a sapkatartó zsinór alá állományjelzővel felfelé kerül, míg a sapka 'szája' a váll felé kell, hogy nézzen."
+    },
+
+    # 110-150: Gyakorló kérdések a fontosabb fogalmakról, szokásokról és viseletekről
+    {
+        "question": "Mi a selmeci hagyomány szerint a balek legfontosabb feladata?",
+        "options": ["Figyelje és kövesse Firmáját, és tartsa be a balekok tízparancsolatát", "Ő vezesse a szakestélyt a Praeses helyett", "Ő hitelesítse a Házirendet a szakestély elején", "Ő ossza ki a tisztségviselők szalagjait"],
+        "answer": "Figyelje és kövesse Firmáját, és tartsa be a balekok tízparancsolatát",
+        "explanation": "A balek legfőbb feladata, hogy kövesse Firmáját, tanuljon tőle, és betartsa a balekok tízparancsolatát."
+    },
+    {
+        "question": "Melyik állítás írja le helyesen a Firma és a balek kapcsolatát?",
+        "options": ["A Firma irányítja és támogatja a balekot, a balek pedig tanul tőle és követi az útmutatását", "A balek vezeti a Firmát a szakestélyen", "A Firma csak a vizsgán segíthet a baleknak", "A két megnevezés ugyanazt a rangot jelenti"],
+        "answer": "A Firma irányítja és támogatja a balekot, a balek pedig tanul tőle és követi az útmutatását",
+        "explanation": "A hagyomány szerint a Firma felelősséget vállal a balekért; a balek a Firmájától tanulja meg a közösség szabályait."
+    },
+    {
+        "question": "Melyik sorrend kapcsolódik a hallgató hagyományos selmeci előrehaladásához?",
+        "options": ["Balek, Kohlenbrenner, Firma, Veterán, Filiszter", "Firma, balek, Filiszter, Kohlenbrenner, Veterán", "Kohlenbrenner, balek, Veterán, Firma, Filiszter", "Balek, Firma, Kohlenbrenner, Filiszter, Veterán"],
+        "answer": "Balek, Kohlenbrenner, Firma, Veterán, Filiszter",
+        "explanation": "A megnevezések a hagyományos hierarchiához kötődnek: a balekból Kohlenbrenner, majd Firma, később Veterán, tanulmányai után pedig Filiszter lehet."
+    },
+    {
+        "question": "Miért nevezik a másodéves hallgatót Kohlenbrennernek?",
+        "options": ["Mert a második évben vegytant és mesterséges szénelőállítást tanult", "Mert a kollégiumi kazánokat fűtötte", "Mert csak szénbányában dolgozhatott", "Mert a szakestélyen fekete ruhát viselt"],
+        "answer": "Mert a második évben vegytant és mesterséges szénelőállítást tanult",
+        "explanation": "A Kohlenbrenner elnevezés a második évben tanult vegytanhoz és a mesterséges szén előállításához kapcsolódik."
+    },
+    {
+        "question": "Mit jelent a 'Veterán' megnevezés a selmeci hagyományban?",
+        "options": ["Olyan Firmát, aki az iskola elvégzéséhez szükséges képzési időn túl van", "A szakestély nótáit vezető tisztségviselőt", "A balekvizsgára készülő elsőévest", "A végzett, elvalétált hallgatót"],
+        "answer": "Olyan Firmát, aki az iskola elvégzéséhez szükséges képzési időn túl van",
+        "explanation": "A hagyomány szerint a Veterán az a Firma, aki a képzési időn túl is az iskolában marad."
+    },
+    {
+        "question": "Mit jelent a 'kussch!' a balekokkal kapcsolatos hagyományban?",
+        "options": ["A balek maradjon csendben", "A balek emelje fel a korsóját", "A balek kérjen szót", "A balek köszönjön a Firmájának"],
+        "answer": "A balek maradjon csendben",
+        "explanation": "A balek tízparancsolatának visszatérő felszólítása a kussch!, vagyis a balek maradjon csendben és figyeljen."
+    },
+    {
+        "question": "Mit jelent a 'konfidens' szó a balek tízparancsolatában?",
+        "options": ["Bizalmaskodó vagy túl közvetlen személyt", "A szakestély elnökét", "A megkeresztelt harmadévest", "A nótákat intonáló tisztségviselőt"],
+        "answer": "Bizalmaskodó vagy túl közvetlen személyt",
+        "explanation": "A 'ne légy konfidens!' arra figyelmezteti a balekot, hogy ne legyen bizalmaskodó, és tartsa tiszteletben a hierarchiát."
+    },
+    {
+        "question": "Mit jelent az 'alias' és a 'vulgo' név a balekkeresztelőn?",
+        "options": ["A keresztapa vulgo, a keresztanya alias nevet ad", "A keresztapa alias, a keresztanya vulgo nevet ad", "Mindkettőt a Praeses adja", "Az alias a Firma, a vulgo a balek neve"],
+        "answer": "A keresztapa vulgo, a keresztanya alias nevet ad",
+        "explanation": "A keresztelési szokás szerint a keresztapa adja a vulgo, a keresztanya pedig az alias nevet."
+    },
+    {
+        "question": "Mi a balekvizsgán megszerezhető legjobb érdemjegy?",
+        "options": ["Elégséges (2)", "Közepes (3)", "Jeles (5)", "Megfelelt"],
+        "answer": "Elégséges (2)",
+        "explanation": "A balekvizsga hagyományos tréfája szerint a legjobb megszerezhető jegy az elégséges."
+    },
+    {
+        "question": "Mit jelent az UV-csekk a balekvizsga hagyományában?",
+        "options": ["Egy üveg vagy doboz sört, amelyet bukás után kell leadni", "A következő vizsga időpontját", "A balekindex pótlását", "Egy krampampulihoz szükséges jegyet"],
+        "answer": "Egy üveg vagy doboz sört, amelyet bukás után kell leadni",
+        "explanation": "Aki megbukik, a hagyomány szerint egy üveg vagy doboz sör, azaz UV-csekk leadása után próbálkozhat újra."
+    },
+    {
+        "question": "Mire szolgált eredetileg a balekfogadás?",
+        "options": ["Az új hallgató megismertetésére a selmeci diáksággal és annak szokásaival", "A végzősök elbúcsúztatására", "A szakestély tisztségviselőinek megválasztására", "A tanulmányi eredmények kihirdetésére"],
+        "answer": "Az új hallgató megismertetésére a selmeci diáksággal és annak szokásaival",
+        "explanation": "A balekfogadás célja az újonnan felvett diák bevezetése volt a közösségbe és a hagyományok világába."
+    },
+    {
+        "question": "Ki a szakestély legfőbb tisztségviselője?",
+        "options": ["A Praeses, vagyis az Elnök", "A Major Domus", "A Fuchsmajor", "A Cantus Praeses"],
+        "answer": "A Praeses, vagyis az Elnök",
+        "explanation": "A Praeses a szakestély legfőbb tisztségviselője, szava és utasítása a szakestély rendjét meghatározza."
+    },
+    {
+        "question": "Milyen színű a Praeses széles tisztségviselői szalagja?",
+        "options": ["Fehér", "Kék", "Piros", "Fekete"],
+        "answer": "Fehér",
+        "explanation": "A Praeses szalagja fehér; a Major Domusé kék, a Fuchsmajoré fekete, a Cantus Praesesé piros."
+    },
+    {
+        "question": "Milyen színű a Major Domus széles tisztségviselői szalagja?",
+        "options": ["Kék", "Fehér", "Sárga", "Fahéjbarna"],
+        "answer": "Kék",
+        "explanation": "A Major Domus, vagyis a Háznagy kék szalagot visel."
+    },
+    {
+        "question": "Milyen színű a Fuchsmajor széles tisztségviselői szalagja?",
+        "options": ["Fekete", "Piros", "Fehér", "Kék"],
+        "answer": "Fekete",
+        "explanation": "A Fuchsmajor, vagyis a Balekcsősz szalagja fekete."
+    },
+    {
+        "question": "Mi a Cantus Praeses legfontosabb feladata?",
+        "options": ["A nóták megfelelő időben történő intonálása", "A Házirend felolvasása", "Az érkezők fogadása", "A világítás biztosítása"],
+        "answer": "A nóták megfelelő időben történő intonálása",
+        "explanation": "A Cantus Praeses vezeti a szakestély nótáit, az Elnök utasítására a megfelelő időben indítva azokat."
+    },
+    {
+        "question": "Mi a Contrapunkt feladata?",
+        "options": ["Az Elnök szavának visszhangzása és tréfás elferdítése", "A résztvevők fogadása", "A krampampuli elkészítése", "A szakestély világításának kezelése"],
+        "answer": "Az Elnök szavának visszhangzása és tréfás elferdítése",
+        "explanation": "A Contrapunkt az Elnök szavát visszhangozza, és megfelelő helyzetben tréfásan elferdíti vagy megerősíti."
+    },
+    {
+        "question": "Mi a Leibfuchs, vagyis a Garatőr feladata?",
+        "options": ["Gondoskodik arról, hogy az Elnök előtt mindig teli korsó legyen", "Ő vezeti a nótákat", "Ő hitelesíti a Házirendet", "Ő fogadja az új balekokat"],
+        "answer": "Gondoskodik arról, hogy az Elnök előtt mindig teli korsó legyen",
+        "explanation": "A Garatőr feladata, hogy az Elnök előtt mindig legyen teli korsó."
+    },
+    {
+        "question": "Mi a Fuhrwerk, vagyis a Fuvaros feladata?",
+        "options": ["Pótolja az asztalokon elfogyó ételt és italt", "A felszólalók mellett világít", "A szakestély első poharát tartja", "A balekok tízparancsolatát olvassa fel"],
+        "answer": "Pótolja az asztalokon elfogyó ételt és italt",
+        "explanation": "A Fuhrwerk az asztalokon lévő étel és ital pótlásával segíti a Major Domus munkáját."
+    },
+    {
+        "question": "Mi a Pater Krampampuli szerepe?",
+        "options": ["Ő készíti el és vezeti fel a krampampulit", "Ő választja meg a Praesest", "Ő őrzi az Elnök korsóját", "Ő vezeti a Szalamander menetet"],
+        "answer": "Ő készíti el és vezeti fel a krampampulit",
+        "explanation": "A Pater Krampampuli a szakestély alatt félrevonulva készíti el a krampampulit, majd az ital felvezetését is ő végzi."
+    },
+    {
+        "question": "Mi történik a szakestély elején a világítással?",
+        "options": ["A résztvevők helyet foglalása után lekapcsolják", "Végig égve marad, mert csak a szünetben kapcsolják le", "A Fuchsmajor oltja el minden felszólalás előtt", "A Pater Krampampuli kapcsolja fel a szakestély végén"],
+        "answer": "A résztvevők helyet foglalása után lekapcsolják",
+        "explanation": "A szakestély kezdetén, miután mindenki elfoglalta a helyét, lekapcsolják a teremben lévő világítást."
+    },
+    {
+        "question": "Mi a 'Sza-sza-szakestély' nóta szerepe a szakestély kezdetén?",
+        "options": ["A Cantus ezzel indítja a szakestélyt", "Ezzel jelzik a szakestély végét", "Ez a szünet végét jelző nóta", "Ezt csak a Gyászszakestélyen éneklik"],
+        "answer": "A Cantus ezzel indítja a szakestélyt",
+        "explanation": "A szakestély kezdetén a Cantus a 'Sza-sza-szakestély' nótát kezdi el, amely alatt a résztvevők megválasztják az Elnököt."
+    },
+    {
+        "question": "Mi a szakestély komoly részének első felszólalása?",
+        "options": ["A Komoly pohár", "A Vendégköszöntő nóta", "A Silentium Eks", "A Valete-beszéd"],
+        "answer": "A Komoly pohár",
+        "explanation": "A Komoly pohár a szakestély első felszólalása, amely a témát érintő beszédként megadja a komoly rész alaphangját."
+    },
+    {
+        "question": "Mit jelent a Silentium Eks a szakestély menetében?",
+        "options": ["A komoly rész végét és a szünet kezdetét", "A szakestély megnyitását", "A krampampuli felvezetését", "A balekvizsga eredményének kihirdetését"],
+        "answer": "A komoly rész végét és a szünet kezdetét",
+        "explanation": "A Silentium Eks akkor következik, amikor az Elnök lezárja a komoly részt, és elkezdődik a szakestély szünete."
+    },
+    {
+        "question": "Melyik nóta jelzi általában a miskolci szakestély szünetének végét?",
+        "options": ["A Steingrubeni induló", "A Sza-sza-szakestély", "A Gaudeamus igitur", "A Bányász himnusz"],
+        "answer": "A Steingrubeni induló",
+        "explanation": "Miskolcon a szünet végét általában a Steingrubeni induló jelzi."
+    },
+    {
+        "question": "Melyik nóta jelzi a szakestély szünetének végét Sopronban?",
+        "options": ["A Szerencse fel a tárna vár", "A Steingrubeni induló", "A Dal az elnökhöz", "A Valete nóta"],
+        "answer": "A Szerencse fel a tárna vár",
+        "explanation": "Sopronban a szünet végét a 'Szerencse fel a tárna vár' jelzi."
+    },
+    {
+        "question": "Mikor lehet a szakestélyen a 'folyó ügyeket' elintézni?",
+        "options": ["Nóta alatt, a megfelelő Tempus-formulával és kézjellel", "Bármikor, külön jelzés nélkül", "Csak a Komoly pohár alatt", "Csak a Praeses helyetteseinek engedélyével"],
+        "answer": "Nóta alatt, a megfelelő Tempus-formulával és kézjellel",
+        "explanation": "Miskolcon a résztvevő nóta alatt, a 'Tempus helyemre és italomra' formulával és a hagyományos kéztartással jelezheti távozási szándékát."
+    },
+    {
+        "question": "Mit jelent az 'Eks!' vezényszó?",
+        "options": ["Fenékig kell inni", "Félig kell inni", "Tetszés szerinti mennyiséget kell inni", "A korsót át kell adni a szomszédnak"],
+        "answer": "Fenékig kell inni",
+        "explanation": "Az Elnök vezényszavai közül az Eks! a korsó fenékig ürítését jelenti."
+    },
+    {
+        "question": "Mit jelent a 'Tükrös!' vezényszó?",
+        "options": ["Félig kell inni", "Fenékig kell inni", "Csak egy kortyot kell inni", "A korsót meg kell tölteni"],
+        "answer": "Félig kell inni",
+        "explanation": "A Tükrös! vezényszó jelentése: a résztvevő félig igyon."
+    },
+    {
+        "question": "Mit jelent a 'Lefety!' vezényszó?",
+        "options": ["Tetszés szerinti mértékben kell inni", "Fenékig kell inni", "Félig kell inni", "A korsót le kell tenni"],
+        "answer": "Tetszés szerinti mértékben kell inni",
+        "explanation": "A Lefety! nem ír elő meghatározott mennyiséget, tetszés szerinti ivást jelent."
+    },
+    {
+        "question": "Melyik állítás igaz a szakestély Házirendjére?",
+        "options": ["A legidősebb, keresztelkedés szerint jelen lévő Firma hitelesíti aláírásával és sörével", "A Praeses egyedül írja alá a szakestély előtt", "A Fuchsmajor hitelesíti a balekok nevében", "A Házirendet csak a szakestély végén olvassák fel"],
+        "answer": "A legidősebb, keresztelkedés szerint jelen lévő Firma hitelesíti aláírásával és sörével",
+        "explanation": "A Háznagy által felolvasott Házirendet a keresztelkedés szerint legidősebb jelenlévő Firma hitelesíti."
+    },
+    {
+        "question": "Mi történik a korsóavatáskor?",
+        "options": ["A korsót egy avatási beszéddel és a korsóavató szertartás részeként avatják fel", "A korsót azonnal összetörik", "A korsót a Fuchsmajor kapja meg emlékül", "A korsót csak a szakestély szünetében lehet használni"],
+        "answer": "A korsót egy avatási beszéddel és a korsóavató szertartás részeként avatják fel",
+        "explanation": "A korsóavatás külön szertartás, amelynek során a korsót beszéddel avatják fel; a hagyomány szerint ezután használható."
+    },
+    {
+        "question": "Mi a 'reibolás' lényege a Gyászszakestélyen?",
+        "options": ["Az üres korsó jellegzetes kopogtatása, dörzsölése és összetörése", "A gyászszalagok elégetése", "A bányászlámpák eloltása", "A szakestély teljes elnémítása"],
+        "answer": "Az üres korsó jellegzetes kopogtatása, dörzsölése és összetörése",
+        "explanation": "A reibolás során az üres korsót meghatározott módon megkopogtatják, az asztalhoz dörzsölik, majd összetörik."
+    },
+    {
+        "question": "Melyik ruhadarab kapcsolódik a mai Gruben történeti elődjéhez?",
+        "options": ["A Bibertárói ruha, vagyis a Biberstollen", "A Freibergi fekete ruha", "A tiroli fehér ruha", "A magyaros díszruha"],
+        "answer": "A Bibertárói ruha, vagyis a Biberstollen",
+        "explanation": "A szakirodalom szerint a mai Gruben valós történeti elődje a Bibertárói ruha, a Biberstollen."
+    },
+    {
+        "question": "Melyik ruhadarab kapcsolódik a mai Bányaing történeti elődjéhez?",
+        "options": ["A Freibergi fekete ruha", "A Bibertárói ruha", "A Walden", "Az Atilla"],
+        "answer": "A Freibergi fekete ruha",
+        "explanation": "A mai Bányaing elődjének a Freibergi fekete ruhát tekintik."
+    },
+    {
+        "question": "Mikor nyerte el nagyjából a mai formáját az akadémiai egyenruha?",
+        "options": ["Az Erdészeti palota 1892-es átadásakor", "A Berg-Schola 1735-ös alapításakor", "Az Akadémia 1762-es létrehozásakor", "A miskolci Egyetemváros építésekor"],
+        "answer": "Az Erdészeti palota 1892-es átadásakor",
+        "explanation": "Az egyenruhákat többször szabályozták, véglegesebb, ma is ismert formájukat az Erdészeti palota átadásakor, 1892-ben nyerték el."
+    },
+    {
+        "question": "Milyen alapanyagú és paszományú a Walden?",
+        "options": ["Őzbarna alapú; erdészeknél zöld, faiparosoknál fekete, geodétáknál sötétkék paszományú", "Fekete alapú; erdészeknél meggypiros, faiparosoknál zöld paszományú", "Palackzöld alapú; minden szakon fekete paszományú", "Szürke alapú; minden szakon arany paszományú"],
+        "answer": "Őzbarna alapú; erdészeknél zöld, faiparosoknál fekete, geodétáknál sötétkék paszományú",
+        "explanation": "A Walden őzbarna anyagból készül, a szakokhoz tartozó paszomány színe pedig eltérő."
+    },
+    {
+        "question": "Hogyan viselik a farbőrt a bányászok?",
+        "options": ["Hátul, hogy a vágatokban csúszásra is használható legyen", "Elöl, kötényként", "A vállon átvetve", "A derék mellett oldalt"],
+        "answer": "Hátul, hogy a vágatokban csúszásra is használható legyen",
+        "explanation": "A bányászok hátul viselték a farbőrt, többek között azért, mert ezen csúsztak le a vágatokba."
+    },
+    {
+        "question": "Hogyan viselik a farbőrt a kohászok?",
+        "options": ["Elöl, kötényként", "Hátul, a bányászokhoz hasonlóan", "A sapka alatt", "A vállukon, köpönyegként"],
+        "answer": "Elöl, kötényként",
+        "explanation": "A kohászok a farbőrt fordítva, elöl, kötényként viselték."
+    },
+    {
+        "question": "Melyik különbség igaz a dunaújvárosi Aufra a miskolcihoz képest?",
+        "options": ["Hiányzik a hátsó hasítéka és hat kisgombja, de jobb oldali mellzsebe van", "Hét nagy gombbal záródik és nincs gallérja", "Ezüst gombos és zöld paszományú", "Válltömést kapott, mint a Gruben"],
+        "answer": "Hiányzik a hátsó hasítéka és hat kisgombja, de jobb oldali mellzsebe van",
+        "explanation": "A dunaújvárosi Auf egyik jellegzetes eltérése a hátsó hasíték és a hat kisgomb hiánya, valamint a jobb oldali mellzseb."
+    },
+    {
+        "question": "Milyen színű paszományt viselnek a bányászok a Grubenön?",
+        "options": ["Fekete", "Meggy-piros", "Zöld", "Sötétkék"],
+        "answer": "Fekete",
+        "explanation": "A Gruben fekete alapú, és a bányászok fekete paszományt viselnek rajta."
+    },
+    {
+        "question": "Milyen színű paszományt viselnek a kohászok a Grubenön?",
+        "options": ["Meggy-piros", "Fekete", "Zöld", "Barna"],
+        "answer": "Meggy-piros",
+        "explanation": "A kohászok Grubenjén a paszomány meggy-piros színű."
+    },
+    {
+        "question": "Mi a Selmeci sapka, más néven ködvágó?",
+        "options": ["A selmeci hagyomány jellegzetes fejfedője", "A szakestély elnöki szalagja", "A bányászok farbőre", "A balekvizsga indexe"],
+        "answer": "A selmeci hagyomány jellegzetes fejfedője",
+        "explanation": "A Selmeci sapka vagy ködvágó a selmeci diákhagyomány jellegzetes fejfedője."
+    },
+    {
+        "question": "Mi a Tempus-folt hagyományos jelentése?",
+        "options": ["Egy kapcsolat vagy eljegyzés emlékét jelző folt az egyenruhán", "A szakestély szünetének jelzése", "A balekvizsgán kapott bukási jel", "A tisztségviselői szalag helyettesítője"],
+        "answer": "Egy kapcsolat vagy eljegyzés emlékét jelző folt az egyenruhán",
+        "explanation": "A Tempus-folt a hagyomány szerint egy kapcsolat vagy eljegyzés emlékét őrzi az egyenruhán."
+    },
+    {
+        "question": "Hogyan távolítható el a Tempus-folt, ha a kapcsolat nem házassággal végződik?",
+        "options": ["Az anyaggal és a béléssel együtt kivágva; a helye csak nagyobb Tempusszal fedhető el", "Egyszerűen lefejtve és fekete cérnával összevarrva", "A szakestélyen elégetve", "A Fuchsmajor engedélyével lemosva"],
+        "answer": "Az anyaggal és a béléssel együtt kivágva; a helye csak nagyobb Tempusszal fedhető el",
+        "explanation": "A hagyomány szerint a Tempust az egyenruha anyagával és bélésével együtt vágják ki; a helyét csak nagyobb Tempus fedheti el."
+    },
+    {
+        "question": "Melyik köszöntés kapcsolódik általánosan a selmeci hagyományhoz?",
+        "options": ["Jó szerencsét!", "Legyen Fényes Sikere a Kohásznak!", "Világost a Geósnak!", "Sza-sza-szakestély!"],
+        "answer": "Jó szerencsét!",
+        "explanation": "A 'Jó szerencsét!' a selmeci bányászati-kohászati hagyomány általánosan használt köszöntése."
+    },
+    {
+        "question": "Melyik köszöntés kapcsolódik a kohászokhoz?",
+        "options": ["Legyen Fényes Sikere a Kohásznak!", "Világost a Geósnak!", "Jó erdőt!", "Szerencse fel a tárna vár!"],
+        "answer": "Legyen Fényes Sikere a Kohásznak!",
+        "explanation": "A kohászok köszöntése: 'Legyen Fényes Sikere a Kohásznak!'"
+    },
+    {
+        "question": "Melyik köszöntés kapcsolódik a székesfehérvári geodétákhoz?",
+        "options": ["Világost a Geósnak!", "Legyen Fényes Sikere a Kohásznak!", "Jó szerencsét a bányásznak!", "Éljen a Praeses!"],
+        "answer": "Világost a Geósnak!",
+        "explanation": "A székesfehérvári geodéták köszöntése: 'Világost a Geósnak!'"
+    },
+    {
+        "question": "Mi látható a bányász címer jellegzetes Schlägel und Eisen motívumában?",
+        "options": ["Kalapács és nyeles ék", "Bányalámpa és csille", "Kard és pajzs", "Ásó és lapát"],
+        "answer": "Kalapács és nyeles ék",
+        "explanation": "A Schlägel und Eisen a bányászati jelképpé vált kalapácsot és nyeles éket ábrázolja."
+    },
+    {
+        "question": "Mi volt a kamara Selmecbányán?",
+        "options": ["A diákok által bérelt kis szoba vagy lakás", "A szakestély elnökségi asztala", "A bányatárspénztár épülete", "Az egyenruhák tárolóhelye"],
+        "answer": "A diákok által bérelt kis szoba vagy lakás",
+        "explanation": "Mivel nem volt kollégium, a diákok magánházaknál béreltek szobát vagy kisebb lakást, ezt nevezték kamarának."
+    },
+    {
+        "question": "Mit jelentett a Verschiess?",
+        "options": ["A legszigorúbb büntetést, a kiközösítést", "A szakestély szünetét", "A balekkeresztelő kezdetét", "A sörpárbaj győzelmét"],
+        "answer": "A legszigorúbb büntetést, a kiközösítést",
+        "explanation": "A Verschiess a közösségből való kiközösítést jelentette, vagyis a hagyományos büntetések legsúlyosabb formáját."
+    },
+    {
+        "question": "Melyik állítás igaz a 'Filiszter' szóra?",
+        "options": ["Régen a diákság jókedvét értetlenül néző polgárt, ma gyakran elvalétált hallgatót jelent", "Mindig az elsőéves hallgatót jelentette", "A szakestély elnökének másik neve", "A balekvizsga hivatalos neve"],
+        "answer": "Régen a diákság jókedvét értetlenül néző polgárt, ma gyakran elvalétált hallgatót jelent",
+        "explanation": "A szó jelentése történetileg változott: eredetileg a diákság életét nem értő polgárra, ma pedig az egyetemi éveit befejező hallgatóra is használják."
+    },
+    {
+        "question": "Mit jelent a 'Valete!'?",
+        "options": ["Éljetek boldogul!", "Jó szerencsét!", "Igyunk fenékig!", "Csendet kérek!"],
+        "answer": "Éljetek boldogul!",
+        "explanation": "A Valete latin eredetű búcsúformula, jelentése: éljetek boldogul."
     }
 ]
+
+
+def build_wrong_answer_explanation(question, user_answer):
+    """Turn the source-based explanation into a clear correction for a wrong answer."""
+    correct_answer = question["answer"]
+    source_explanation = question["explanation"]
+
+    if user_answer is None:
+        return (
+            f"Erre a kérdésre nem érkezett válasz. A helyes válasz: "
+            f"'{correct_answer}'. {source_explanation}"
+        )
+
+    return (
+        f"Azért nem helyes, mert a megadott válasz ('{user_answer}') nem egyezik "
+        f"a kérdésben szereplő ténnyel. A helyes válasz '{correct_answer}', "
+        f"mert a forrás szerinti magyarázat ez: {source_explanation}"
+    )
+
 
 st.title("balekvizsgára")
 
@@ -773,18 +1166,22 @@ if st.session_state.submitted:
         for i, q in enumerate(st.session_state.quiz_questions)
     )
     st.metric(label="Végső pontszám", value=f"{score} / {len(st.session_state.quiz_questions)}")
-    st.subheader("Eredmények és Magyarázatok")
-    
-    for i, q in enumerate(st.session_state.quiz_questions):
-        user_ans = st.session_state.user_answers.get(i)
-        correct_ans = q['answer']
-        
-        if user_ans == correct_ans:
-            st.success(f"{i+1}. kérdés: Helyes! ({correct_ans})")
-        else:
-            valasz_szoveg = user_ans if user_ans is not None else "Nem válaszoltál"
-            st.error(f"{i+1}. kérdés: Helytelen. A te válaszod: '{valasz_szoveg}'. A helyes válasz: '{correct_ans}'.")
-            st.info(f"**Magyarázat:** {q['explanation']}")
+    st.subheader("Gyakorolandó kérdések")
+
+    incorrect_questions = [
+        (i, q, st.session_state.user_answers.get(i))
+        for i, q in enumerate(st.session_state.quiz_questions)
+        if st.session_state.user_answers.get(i) != q["answer"]
+    ]
+
+    if not incorrect_questions:
+        st.success("Minden kérdésre helyesen válaszoltál!")
+
+    for i, q, user_ans in incorrect_questions:
+        st.markdown(f"**{i + 1}. kérdés: {q['question']}**")
+        valasz_szoveg = user_ans if user_ans is not None else "Nem válaszoltál"
+        st.error(f"A te válaszod: '{valasz_szoveg}'. A helyes válasz: '{q['answer']}'.")
+        st.info(f"**Miért volt hibás?** {build_wrong_answer_explanation(q, user_ans)}")
 
     if st.button("Új 50 kérdéses kvíz indítása"):
         st.session_state.clear()
@@ -838,7 +1235,10 @@ else:
                 st.success("Helyes válasz!")
             else:
                 st.error(f"Helytelen. A helyes válasz: {question['answer']}")
-                st.info(f"**Magyarázat:** {question['explanation']}")
+                st.info(
+                    f"**Miért volt hibás?** "
+                    f"{build_wrong_answer_explanation(question, selected_answer)}"
+                )
 
         back_column, next_column = st.columns(2)
         with back_column:
