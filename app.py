@@ -2,6 +2,7 @@ import streamlit as st
 import random
 import sqlite3
 from pathlib import Path
+from urllib.parse import quote
 
 st.set_page_config(page_title="balekvizsgára", layout="centered")
 st.markdown("""
@@ -1187,6 +1188,53 @@ def build_wrong_answer_explanation(question, user_answer):
     )
 
 
+def render_question_report(question, report_key):
+    if st.button(
+        "Hibáztam? Segíts kijavítani!",
+        key=f"report-button-{report_key}",
+        use_container_width=True,
+    ):
+        st.session_state.report_question = {
+            "report_key": report_key,
+            "question": question["question"],
+            "options": question["options"],
+            "answer": question["answer"],
+        }
+        st.session_state.report_text = ""
+
+    report_question = st.session_state.get("report_question")
+    if report_question is not None and report_question["report_key"] == report_key:
+        st.warning(
+            f"Jelentett kérdés: **{report_question['question']}**"
+        )
+        report_text = st.text_area(
+            "Írd le, mi lenne helyes, vagy mi a probléma!",
+            key="report_text",
+        )
+        if report_text.strip():
+            options = "\n".join(
+                f"- {option}" for option in report_question["options"]
+            )
+            email_body = (
+                "Szia!\n\n"
+                "Hibát szeretnék jelenteni a balekvizsga egyik kérdésében.\n\n"
+                f"Kérdés:\n{report_question['question']}\n\n"
+                f"Válaszlehetőségek:\n{options}\n\n"
+                f"Jelenlegi helyes válasz: {report_question['answer']}\n\n"
+                f"Javasolt javítás / megjegyzés:\n{report_text.strip()}"
+            )
+            mailto_url = (
+                "mailto:nagymark2357@gmail.com"
+                f"?subject={quote('Balekvizsga kérdés javítása')}"
+                f"&body={quote(email_body)}"
+            )
+            st.link_button(
+                "Jelentés megnyitása az e-mailben",
+                mailto_url,
+                use_container_width=True,
+            )
+
+
 initialize_leaderboard()
 
 if "page" not in st.session_state:
@@ -1199,6 +1247,15 @@ if st.session_state.page == "welcome":
         "Teszteld a tudásodat a selmeci hagyományokról, a szakestélyekről "
         "és az egyenruhákról."
     )
+
+    if st.button("Készülj fel!", type="primary", use_container_width=True):
+        st.session_state.page = "quiz"
+        st.session_state.quiz_questions = None
+        st.session_state.user_answers = {}
+        st.session_state.current_question = 0
+        st.session_state.submitted = False
+        st.session_state.leaderboard_saved = False
+        st.rerun()
 
     st.subheader("Leaderboard")
     leaderboard = get_leaderboard()
@@ -1216,14 +1273,6 @@ if st.session_state.page == "welcome":
     else:
         st.info("Még nincs eredmény a ranglistán. Légy te az első!")
 
-    if st.button("Készülj fel!", type="primary", use_container_width=True):
-        st.session_state.page = "quiz"
-        st.session_state.quiz_questions = None
-        st.session_state.user_answers = {}
-        st.session_state.current_question = 0
-        st.session_state.submitted = False
-        st.session_state.leaderboard_saved = False
-        st.rerun()
     st.stop()
 
 
@@ -1276,6 +1325,7 @@ if st.session_state.submitted:
         valasz_szoveg = user_ans if user_ans is not None else "Nem válaszoltál"
         st.error(f"A te válaszod: '{valasz_szoveg}'. A helyes válasz: '{q['answer']}'.")
         st.info(f"**Miért volt hibás?** {build_wrong_answer_explanation(q, user_ans)}")
+        render_question_report(q, f"result-{i}")
 
     if not st.session_state.leaderboard_saved:
         st.subheader("Felkerüljön az eredményed a leaderboardra?")
@@ -1349,6 +1399,7 @@ else:
                     f"**Miért volt hibás?** "
                     f"{build_wrong_answer_explanation(question, selected_answer)}"
                 )
+        render_question_report(question, f"quiz-{question_index}")
 
         back_column, next_column = st.columns(2)
         with back_column:
