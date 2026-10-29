@@ -77,6 +77,20 @@ st.markdown("""
     .answer-burst--wrong {
         background: radial-gradient(ellipse at 50% 45%, rgba(255, 55, 75, 0.3), rgba(255, 55, 75, 0.11) 36%, transparent 76%);
     }
+    [class*="st-key-question-report-"] {
+        margin: -0.3rem 0 0.8rem;
+    }
+    [class*="st-key-question-report-"] button {
+        border-color: rgba(255, 180, 90, 0.8);
+        color: #ffc078;
+        padding: 0.45rem 0.7rem;
+        font-size: 0.85rem;
+    }
+    [class*="st-key-question-report-"] button:hover:enabled {
+        background-color: rgba(255, 180, 90, 0.12);
+        color: #ffe0b2;
+        box-shadow: 0 0 12px rgba(255, 180, 90, 0.25);
+    }
     @media (prefers-reduced-motion: reduce) {
         [class*="st-key-question-slide-"], .answer-burst { animation: none; }
     }
@@ -1188,12 +1202,8 @@ def build_wrong_answer_explanation(question, user_answer):
     )
 
 
-def render_question_report(question, report_key):
-    if st.button(
-        "Hibáztam? Segíts kijavítani!",
-        key=f"report-button-{report_key}",
-        use_container_width=True,
-    ):
+def render_question_report_button(question, report_key):
+    if st.button("Hibáztam? Segíts kijavítani!", key=f"report-button-{report_key}"):
         st.session_state.report_question = {
             "report_key": report_key,
             "question": question["question"],
@@ -1202,6 +1212,8 @@ def render_question_report(question, report_key):
         }
         st.session_state.report_text = ""
 
+
+def render_question_report_form(report_key):
     report_question = st.session_state.get("report_question")
     if report_question is not None and report_question["report_key"] == report_key:
         st.warning(
@@ -1325,8 +1337,6 @@ if st.session_state.submitted:
         valasz_szoveg = user_ans if user_ans is not None else "Nem válaszoltál"
         st.error(f"A te válaszod: '{valasz_szoveg}'. A helyes válasz: '{q['answer']}'.")
         st.info(f"**Miért volt hibás?** {build_wrong_answer_explanation(q, user_ans)}")
-        render_question_report(q, f"result-{i}")
-
     if not st.session_state.leaderboard_saved:
         st.subheader("Felkerüljön az eredményed a leaderboardra?")
         wants_to_join = st.checkbox("Igen, szeretném beküldeni az eredményemet.")
@@ -1363,6 +1373,11 @@ else:
 
     with st.container(key=f"question-slide-{question_index}"):
         st.progress((question_index + 1) / question_count)
+        report_button_column = st.columns([3, 1])[1]
+        with report_button_column:
+            with st.container(key=f"question-report-{question_index}"):
+                render_question_report_button(question, f"quiz-{question_index}")
+        render_question_report_form(f"quiz-{question_index}")
         st.markdown(
             f'<p class="quiz-counter">{question_index + 1} / {question_count}. kérdés</p>',
             unsafe_allow_html=True,
@@ -1399,8 +1414,6 @@ else:
                     f"**Miért volt hibás?** "
                     f"{build_wrong_answer_explanation(question, selected_answer)}"
                 )
-        render_question_report(question, f"quiz-{question_index}")
-
         back_column, next_column = st.columns(2)
         with back_column:
             if st.button("← Előző", disabled=question_index == 0, use_container_width=True):
