@@ -1161,28 +1161,36 @@ def render_question_report_form(report_key):
             f"""
             <label for="report-text">Írd le, mi lenne helyes, vagy mi a probléma!</label>
             <textarea id="report-text" autofocus></textarea>
-            <button id="report-submit" type="button">Jelentés elküldése</button>
+            <a id="report-submit" href="#" role="button">Jelentés elküldése</a>
             <script>
                 const reportText = document.getElementById("report-text");
                 const reportSubmit = document.getElementById("report-submit");
                 const emailBodyPrefix = {json.dumps(email_body_prefix)};
-                const openEmail = () => {{
+                const buildEmailUrl = () => {{
                     const report = reportText.value.trim();
                     if (!report) {{
-                        return;
+                        return null;
                     }}
                     const subject = encodeURIComponent("balekvizsga kérdés javítása");
                     const body = encodeURIComponent(emailBodyPrefix + report);
-                    window.top.location.href =
-                        "mailto:nagymark2357@gmail.com?subject=" + subject + "&body=" + body;
+                    return (
+                        "mailto:nagymark2357@gmail.com?subject=" + subject + "&body=" + body
+                    );
                 }};
-                reportSubmit.addEventListener("click", openEmail);
+                reportSubmit.addEventListener("click", (event) => {{
+                    const emailUrl = buildEmailUrl();
+                    if (!emailUrl) {{
+                        event.preventDefault();
+                        return;
+                    }}
+                    reportSubmit.href = emailUrl;
+                }});
                 reportText.addEventListener("keydown", (event) => {{
                     if (event.key !== "Enter" || event.shiftKey) {{
                         return;
                     }}
                     event.preventDefault();
-                    openEmail();
+                    reportSubmit.click();
                 }});
             </script>
             <style>
@@ -1208,7 +1216,8 @@ def render_question_report_form(report_key):
                 textarea:focus {{
                     box-shadow: 0 0 0 1px #00ffaa;
                 }}
-                button {{
+                a {{
+                    display: inline-block;
                     margin-top: 0.65rem;
                     padding: 0.65rem 0.85rem;
                     border: 1px solid #444444;
@@ -1217,8 +1226,9 @@ def render_question_report_form(report_key):
                     background: #171717;
                     font: 500 0.9rem 'DM Sans', sans-serif;
                     cursor: pointer;
+                    text-decoration: none;
                 }}
-                button:hover {{
+                a:hover {{
                     border-color: #00ffaa;
                     color: #ffffff;
                 }}
