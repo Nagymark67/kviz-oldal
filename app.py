@@ -1161,14 +1161,12 @@ def render_question_report_form(report_key):
             f"""
             <label for="report-text">Írd le, mi lenne helyes, vagy mi a probléma!</label>
             <textarea id="report-text" autofocus></textarea>
+            <button id="report-submit" type="button">Jelentés elküldése</button>
             <script>
                 const reportText = document.getElementById("report-text");
+                const reportSubmit = document.getElementById("report-submit");
                 const emailBodyPrefix = {json.dumps(email_body_prefix)};
-                reportText.addEventListener("keydown", (event) => {{
-                    if (event.key !== "Enter" || event.shiftKey) {{
-                        return;
-                    }}
-                    event.preventDefault();
+                const openEmail = () => {{
                     const report = reportText.value.trim();
                     if (!report) {{
                         return;
@@ -1177,6 +1175,14 @@ def render_question_report_form(report_key):
                     const body = encodeURIComponent(emailBodyPrefix + report);
                     window.top.location.href =
                         "mailto:nagymark2357@gmail.com?subject=" + subject + "&body=" + body;
+                }};
+                reportSubmit.addEventListener("click", openEmail);
+                reportText.addEventListener("keydown", (event) => {{
+                    if (event.key !== "Enter" || event.shiftKey) {{
+                        return;
+                    }}
+                    event.preventDefault();
+                    openEmail();
                 }});
             </script>
             <style>
@@ -1202,9 +1208,23 @@ def render_question_report_form(report_key):
                 textarea:focus {{
                     box-shadow: 0 0 0 1px #00ffaa;
                 }}
+                button {{
+                    margin-top: 0.65rem;
+                    padding: 0.65rem 0.85rem;
+                    border: 1px solid #444444;
+                    border-radius: 8px;
+                    color: #f0f0f0;
+                    background: #171717;
+                    font: 500 0.9rem 'DM Sans', sans-serif;
+                    cursor: pointer;
+                }}
+                button:hover {{
+                    border-color: #00ffaa;
+                    color: #ffffff;
+                }}
             </style>
             """,
-            height=142,
+            height=190,
         )
 
 
