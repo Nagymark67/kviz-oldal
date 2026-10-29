@@ -529,7 +529,7 @@ ALL_QUESTIONS = [
         "explanation": "Selmecbányán a II. évben tanulták a hallgatók a vegytant és ezzel együtt a mesterséges szénelőállítást."
     },
 
-    # 61-75: Balekság, Valétálás és Szakestélyek
+    # 61-75: balekság, Valétálás és Szakestélyek
     {
         "question": "Kit neveztek eredetileg Selmecen 'Filiszternek', és kit nevezünk így ma?",
         "options": ["Régen a diákság jókedve előtt értetlenül álló polgárt, ma az elvalétált (végzett) hallgatót", "Régen az elsőéves diákot, ma a professzorokat", "Régen a kocsmárost, ma a Valétaelnököt", "Régen a bukott diákot, ma a Veteránt"],
@@ -538,7 +538,7 @@ ALL_QUESTIONS = [
     },
     {
         "question": "Mi a balekjelölt életének három ballépése, amiért bal lábbal kell belépnie a balekvizsgára?",
-        "options": ["1. Megszületett, 2. Beiratkozott az egyetemre, 3. Belép a balekvizsgára", "1. Érettségit tett, 2. Kollégista lett, 3. Megbukott a zh-n", "1. Pogány volt, 2. Balek lett, 3. Kohlenbrenner lesz", "1. Ivott a szakestélyen, 2. Kiment nóta alatt, 3. Elfelejtette a tízparancsolatot"],
+        "options": ["1. Megszületett, 2. Beiratkozott az egyetemre, 3. Belép a balekvizsgára", "1. Érettségit tett, 2. Kollégista lett, 3. Megbukott a zh-n", "1. Pogány volt, 2. balek lett, 3. Kohlenbrenner lesz", "1. Ivott a szakestélyen, 2. Kiment nóta alatt, 3. Elfelejtette a tízparancsolatot"],
         "answer": "1. Megszületett, 2. Beiratkozott az egyetemre, 3. Belép a balekvizsgára",
         "explanation": "Az első ballépés, hogy megszületett, a második az egyetemre való beiratkozás, a harmadik a vizsgaterembe való belépés."
     },
@@ -707,7 +707,7 @@ ALL_QUESTIONS = [
         "explanation": "Az Erdészeti palota átadásakor, 1892-ben egységesítették véglegesen a ma is ismert egyenruhákat."
     },
     {
-        "question": "Hány gomb és milyen válltömés található a miskolci bányászok és kohászok Grubenjén?",
+        "question": "Hány gomb és milyen válltömés található a miskolci bányászok és kohászok Grubenen?",
         "options": ["Elöl 5 nagy, mellzsebeken 2 kis, hátul 3-3 nagy gomb; a vállon 4-5 függőleges és 3 vízszintes hurka", "Elöl 7 nagy, hátul 2-2 kis gomb; a vállon 3 függőleges és 3 vízszintes hurka", "Elöl 5 nagy, kézelőn 3-3 kis gomb; válltömés nélkül", "Elöl 8-10 kis gomb, mellen 5-5 kis gomb; vállrojtozással"],
         "answer": "Elöl 5 nagy, mellzsebeken 2 kis, hátul 3-3 nagy gomb; a vállon 4-5 függőleges és 3 vízszintes hurka",
         "explanation": "A Gruben elől 5 nagy, a mellzsebeken 2 kis, hátul 3-3 nagy bányászgombbal rendelkezik, vállát 4-5 függőleges és 3 vízszintes hurka vastagítja."
@@ -769,7 +769,7 @@ ALL_QUESTIONS = [
         "explanation": "Az 1870-es Schemnitzer Akademische Lieder tartalmazta a 88 nótát és a Cerevis kártyajáték szabályait."
     },
     {
-        "question": "Melyik évre fejeződött be a dalok magyarra fordítása az 'A mi nótáink' daloskönyvben (kivéve a Balekkeresztelő nótát)?",
+        "question": "Melyik évre fejeződött be a dalok magyarra fordítása az 'A mi nótáink' daloskönyvben (kivéve a balekkeresztelő nótát)?",
         "options": ["1931-re", "1905-re", "1911-re", "1921-re"],
         "answer": "1931-re",
         "explanation": "1905-ben Tassonyi Ernő regényében jelent meg a magyar Bányász himnusz, a teljes fordítás pedig az 1931-es kiadásra fejeződött be."
@@ -832,8 +832,8 @@ ALL_QUESTIONS = [
     },
     {
         "question": "Melyik sorrend kapcsolódik a hallgató hagyományos selmeci előrehaladásához?",
-        "options": ["Balek, Kohlenbrenner, Firma, Veterán, Filiszter", "Firma, balek, Filiszter, Kohlenbrenner, Veterán", "Kohlenbrenner, balek, Veterán, Firma, Filiszter", "Balek, Firma, Kohlenbrenner, Filiszter, Veterán"],
-        "answer": "Balek, Kohlenbrenner, Firma, Veterán, Filiszter",
+        "options": ["balek, Kohlenbrenner, Firma, Veterán, Filiszter", "Firma, balek, Filiszter, Kohlenbrenner, Veterán", "Kohlenbrenner, balek, Veterán, Firma, Filiszter", "balek, Firma, Kohlenbrenner, Filiszter, Veterán"],
+        "answer": "balek, Kohlenbrenner, Firma, Veterán, Filiszter",
         "explanation": "A megnevezések a hagyományos hierarchiához kötődnek: a balekból Kohlenbrenner, majd Firma, később Veterán, tanulmányai után pedig Filiszter lehet."
     },
     {
@@ -1068,7 +1068,7 @@ ALL_QUESTIONS = [
         "question": "Milyen színű paszományt viselnek a kohászok a Grubenen?",
         "options": ["Meggy-piros", "Fekete", "Zöld", "Barna"],
         "answer": "Meggy-piros",
-        "explanation": "A kohászok Grubenjén a paszomány meggy-piros színű."
+        "explanation": "A kohászok Grubenen a paszomány meggy-piros színű."
     },
     {
         "question": "Mi a Selmeci sapka, más néven ködvágó?",
@@ -1242,7 +1242,7 @@ def render_question_report_form(report_key):
             )
             mailto_url = (
                 "mailto:nagymark2357@gmail.com"
-                f"?subject={quote('Balekvizsga kérdés javítása')}"
+                f"?subject={quote('balekvizsga kérdés javítása')}"
                 f"&body={quote(email_body)}"
             )
             st.link_button(
